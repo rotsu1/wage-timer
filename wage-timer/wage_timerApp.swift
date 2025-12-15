@@ -11,7 +11,7 @@ import SwiftUI
 struct wage_timerApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            HomeView()
         }
     }
 }

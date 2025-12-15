@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXFileReference section */
-		42B97BE82EEFF9E300C03E89 /* wage-timer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "wage-timer.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		42B97BE82EEFF9E300C03E89 /* wage-timer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = "wage-timer.app"; path = "/Users/ryu/Desktop/portfolio/hourly-pay-timer/wage-timer/build/Debug-iphoneos/wage-timer.app"; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -33,16 +33,7 @@
 			isa = PBXGroup;
 			children = (
 				42B97BEA2EEFF9E300C03E89 /* wage-timer */,
-				42B97BE92EEFF9E300C03E89 /* Products */,
 			);
-			sourceTree = "<group>";
-		};
-		42B97BE92EEFF9E300C03E89 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				42B97BE82EEFF9E300C03E89 /* wage-timer.app */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -95,7 +86,7 @@
 			mainGroup = 42B97BDF2EEFF9E300C03E89;
 			minimizedProjectReferenceProxies = 1;
 			preferredProjectObjectVersion = 77;
-			productRefGroup = 42B97BE92EEFF9E300C03E89 /* Products */;
+			productRefGroup = 42B97BDF2EEFF9E300C03E89;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (

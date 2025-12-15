@@ -1,0 +1,23 @@
+# Xcode
+DerivedData/
+build/
+xcuserdata/
+*.xcuserstate
+
+# SwiftPM
+.build/
+.swiftpm/
+
+# Secrets
+*.env
+Secrets.plist
+
+# OS / Editor
+.DS_Store
+.idea/
+.vscode/
+
+# Fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/
