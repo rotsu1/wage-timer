@@ -14,16 +14,31 @@ struct HomeView: View {
     var body: some View {
         ZStack {
             backgroundGradient
-            VStack {
+                .ignoresSafeArea()
+            ScrollView {
+                HStack {
+                    VStack {
+                        Text("  ")
+                    }
+                    Spacer()
+                    Text("マイナス時給")
+                        .foregroundStyle(.white)
+                    Spacer()
+                    Image(systemName: "bell")
+                        .foregroundStyle(.white)
+                }
+                .padding()
                 SummaryView()
                     .padding(.horizontal, 16)
                     .frame(
                         minHeight: 100,
                         maxHeight: 350)
                 TodaysAppsView()
+                    .padding([.top, .horizontal], 16)
+                
+                Spacer()
             }
         }
-        .ignoresSafeArea()
     }
 }
 

@@ -20,6 +20,10 @@ private func card(title: String, money: String, description: String) -> some Vie
     .minimumScaleFactor(0.5)
     .frame(maxWidth: .infinity, minHeight: 80, alignment: .leading)
     .padding()
+    .overlay(
+        RoundedRectangle(cornerRadius: 20)
+            .stroke(Color.rgbo(red: 242, green: 118, blue: 118, opacity: 0.3))
+    )
     .background(
         RoundedRectangle(cornerRadius: 20)
             .fill(Color.rgbo(red: 242, green: 118, blue: 118, opacity: 0.2))
@@ -43,6 +47,10 @@ struct SummaryView: View {
                             .fontWeight(.bold)
                     }
                     .padding(.all, 8)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 20)
+                            .stroke(Color.rgbo(red: 242, green: 118, blue: 118, opacity: 0.3))
+                    )
                     .background(
                         RoundedRectangle(cornerRadius: 20)
                             .fill(Color.rgbo(red: 242, green: 118, blue: 118, opacity: 0.3))
@@ -52,6 +60,10 @@ struct SummaryView: View {
                             .fontWeight(.bold)
                     }
                     .padding(.all, 8)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 20)
+                            .stroke(Color.rgbo(red: 242, green: 118, blue: 118, opacity: 0.3))
+                    )
                     .background(
                         RoundedRectangle(cornerRadius: 20)
                             .fill(Color.rgbo(red: 242, green: 118, blue: 118, opacity: 0.3))
@@ -70,6 +82,10 @@ struct SummaryView: View {
             }
         }
         .padding()
+        .overlay(
+            RoundedRectangle(cornerRadius: 10)
+                .stroke(Color.rgbo(red: 242, green: 118, blue: 118, opacity: 0.3))
+        )
         .background(
             RoundedRectangle(cornerRadius: 10)
                 .fill(Color.rgbo(red: 242, green: 118, blue: 118, opacity: 0.1))
