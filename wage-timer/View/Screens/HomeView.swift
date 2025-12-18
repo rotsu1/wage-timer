@@ -1,10 +1,9 @@
 //
-//  ContentView.swift
+//  HomeView.swift
 //  wage-timer
 //
-//  Created by 乙津　龍　 on 15/12/2025.
+//  Created by 乙津　龍　 on 18/12/2025.
 //
-
 import SwiftUI
 
 let backgroundGradient = LinearGradient(
