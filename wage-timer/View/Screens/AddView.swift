@@ -11,7 +11,7 @@ struct AddView: View {
         ZStack {
             backgroundGradient
                 .ignoresSafeArea()
-            ScrollView {
+            VStack {
                 HStack {
                     VStack {
                         Text("  ")
@@ -24,7 +24,10 @@ struct AddView: View {
                         .foregroundStyle(.white)
                 }
                 .padding()
-                AddInputView()
+                ScrollView {
+                    AddInputView()
+                        .padding(.horizontal, 16)
+                }
             }
         }
     }

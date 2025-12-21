@@ -11,7 +11,7 @@ struct HomeView: View {
         ZStack {
             backgroundGradient
                 .ignoresSafeArea()
-            ScrollView {
+            VStack {
                 HStack {
                     VStack {
                         Text("  ")
@@ -24,16 +24,17 @@ struct HomeView: View {
                         .foregroundStyle(.white)
                 }
                 .padding()
-                
-                SummaryView()
-                    .padding(.horizontal, 16)
-                    .frame(
-                        minHeight: 100,
-                        maxHeight: 350)
-                TodaysAppsView()
-                    .padding([.top, .horizontal], 16)
-                
-                Spacer()
+                ScrollView {
+                    SummaryView()
+                        .padding(.horizontal, 16)
+                        .frame(
+                            minHeight: 100,
+                            maxHeight: 350)
+                    TodaysAppsView()
+                        .padding([.top, .horizontal], 16)
+                    
+                    Spacer()
+                }
             }
         }
     }

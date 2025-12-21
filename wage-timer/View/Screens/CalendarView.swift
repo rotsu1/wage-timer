@@ -12,7 +12,7 @@ struct CalendarView: View {
         ZStack {
             backgroundGradient
                 .ignoresSafeArea()
-            ScrollView {
+            VStack {
                 HStack {
                     VStack {
                         Text("  ")
@@ -25,13 +25,14 @@ struct CalendarView: View {
                         .foregroundStyle(.white)
                 }
                 .padding()
-                
-                CalendarComponentView()
-                    .padding(.horizontal, 16)
-                CalendarDaySummaryView()
-                    .padding(.horizontal, 16)
-                
-                Spacer()
+                ScrollView {                
+                    CalendarComponentView()
+                        .padding(.horizontal, 16)
+                    CalendarDaySummaryView()
+                        .padding(.horizontal, 16)
+                    
+                    Spacer()
+                }
             }
         }
     }

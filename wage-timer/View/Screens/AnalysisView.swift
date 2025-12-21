@@ -12,7 +12,7 @@ struct AnalysisView: View {
         ZStack {
             backgroundGradient
                 .ignoresSafeArea()
-            ScrollView {
+            VStack {
                 HStack {
                     VStack {
                         Text("  ")
@@ -25,15 +25,16 @@ struct AnalysisView: View {
                         .foregroundStyle(.white)
                 }
                 .padding()
-
-                PeriodView()
-                    .padding(.horizontal, 16)
-                GraphView()
-                    .padding(.horizontal, 16)
-                CategoryView()
-                    .padding(.horizontal, 16)
-                
-                Spacer()
+                ScrollView {
+                    PeriodView()
+                        .padding(.horizontal, 16)
+                    GraphView()
+                        .padding(.horizontal, 16)
+                    CategoryView()
+                        .padding(.horizontal, 16)
+                    
+                    Spacer()
+                }
             }
         }
     }

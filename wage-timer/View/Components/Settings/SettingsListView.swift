@@ -22,53 +22,86 @@ struct SettingsListView: View {
                 .padding()
                 .background(
                     RoundedRectangle(cornerRadius: 20)
-                        .fill(Color.rgbo(red: 128, green: 110, blue: 110, opacity: 0.8))
+                        .fill(
+                            LinearGradient(
+                                colors: [
+                                    Color.rgbo(red: 146, green: 144, blue: 202, opacity: 1), 
+                                    Color.rgbo(red: 85, green: 84, blue: 117, opacity: 1)
+                                ],
+                                startPoint: .top, endPoint: .bottom
+                            )
+                        )
                 )
                 .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
             }
             Section {
                 HStack {
-                    Text("時給")
+                    HStack {
+                        Image(systemName: "yensign.arrow.trianglehead.counterclockwise.rotate.90")
+                        Text("時給")
+                    }
                     Spacer()
                     HStack {
                         Text("¥1000")
                         Image(systemName: "chevron.right")
                     }
+                    .fontWeight(.light)
+                    .foregroundStyle(Color.rgbo(red: 179, green: 179, blue: 179, opacity: 1))
                 }
                 HStack {
-                    Text("通貨")
+                    HStack {
+                        Image(systemName: "yensign")
+                        Text("通貨")
+                    }
                     Spacer()
                     HStack {
                         Text("日本円")
                         Image(systemName: "chevron.right")
                     }
+                    .fontWeight(.light)
+                    .foregroundStyle(Color.rgbo(red: 179, green: 179, blue: 179, opacity: 1))
                 }
                 HStack {
-                    Text("言語")
+                    HStack {
+                        Image(systemName: "globe")
+                        Text("言語")
+                    }
                     Spacer()
                     HStack {
                         Text("日本語")
                         Image(systemName: "chevron.right")
                     }
+                    .fontWeight(.light)
+                    .foregroundStyle(Color.rgbo(red: 179, green: 179, blue: 179, opacity: 1))
                 }
                 HStack {
-                    Text("外観モード")
+                    HStack {
+                        Image(systemName: "circle.righthalf.filled")
+                        Text("外観モード")
+                    }
                     Spacer()
                     HStack {
                         Text("ダーク")
                         Image(systemName: "chevron.up.chevron.down")
                     }
+                    .fontWeight(.light)
+                    .foregroundStyle(Color.rgbo(red: 179, green: 179, blue: 179, opacity: 1))
                 }
                 HStack {
-                    Text("通知")
+                    HStack {
+                        Image(systemName: "bell")
+                        Text("通知")
+                    }
                     Spacer()
                     Image(systemName: "chevron.right")
+                        .fontWeight(.light)
+                        .foregroundStyle(Color.rgbo(red: 179, green: 179, blue: 179, opacity: 1))
                 }
             } header: {
                 Text("アプリ")
                 .foregroundStyle(.white)
             }
-            .listRowBackground(Color.rgbo(red: 128, green: 110, blue: 110, opacity: 1))
+            .listRowBackground(Color.rgbo(red: 64, green: 64, blue: 64, opacity: 1))
             .foregroundStyle(.white)
 
             Section {
@@ -79,9 +112,11 @@ struct SettingsListView: View {
                     }
                     Spacer()
                     Image(systemName: "chevron.right")
+                        .fontWeight(.light)
+                        .foregroundStyle(Color.rgbo(red: 179, green: 179, blue: 179, opacity: 1))
                 }
             }
-            .listRowBackground(Color.rgbo(red: 128, green: 110, blue: 110, opacity: 1))
+            .listRowBackground(Color.rgbo(red: 64, green: 64, blue: 64, opacity: 1))
             .foregroundStyle(.white)
 
         }

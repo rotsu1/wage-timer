@@ -66,10 +66,6 @@ struct CalendarComponentView: View {
                             Spacer()
                         }
                         .frame(maxWidth: .infinity, minHeight: 60)
-                        .background(
-                            RoundedRectangle(cornerRadius: 10)
-                                .fill(Color.rgbo(red: 242, green: 118, blue: 118, opacity: 0.3))
-                        )
                     }
                 }
             }
