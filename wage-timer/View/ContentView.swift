@@ -19,6 +19,9 @@ struct WageAppView: View {
             Tab("Add", systemImage: "plus") {
                 AddView()
             }
+            Tab("Analysis", systemImage: "chart.xyaxis.line") {
+                AnalysisView()
+            }
             Tab("Settings", systemImage: "gearshape") {
                 SettingsView()
             }
