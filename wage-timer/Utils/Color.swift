@@ -15,3 +15,7 @@ extension Color {
         return self.init(red: red/255, green: green/255, blue: blue/255, opacity: opacity)
     }
 }
+
+let backgroundGradient = LinearGradient(
+    colors: [Color.rgb(red: 1, green: 53, blue: 150), Color.black],
+    startPoint: .top, endPoint: .bottom)

@@ -1,12 +1,13 @@
 //
-//  HomeView.swift
+//  Calendar.swift
 //  wage-timer
 //
 //  Created by 乙津　龍　 on 18/12/2025.
 //
+
 import SwiftUI
 
-struct HomeView: View {
+struct CalendarView: View {
     var body: some View {
         ZStack {
             backgroundGradient
@@ -25,13 +26,10 @@ struct HomeView: View {
                 }
                 .padding()
                 
-                SummaryView()
+                CalendarComponentView()
                     .padding(.horizontal, 16)
-                    .frame(
-                        minHeight: 100,
-                        maxHeight: 350)
-                TodaysAppsView()
-                    .padding([.top, .horizontal], 16)
+                CalendarDaySummaryView()
+                    .padding(.horizontal, 16)
                 
                 Spacer()
             }
@@ -40,5 +38,5 @@ struct HomeView: View {
 }
 
 #Preview {
-    HomeView()
+    CalendarView()
 }

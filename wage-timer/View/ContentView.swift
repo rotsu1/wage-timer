@@ -13,6 +13,9 @@ struct WageAppView: View {
             Tab("Home", systemImage: "house") {
                 HomeView()
             }
+            Tab("Calendar", systemImage: "calendar") {
+                CalendarView()
+            }
         }
     }
 }
