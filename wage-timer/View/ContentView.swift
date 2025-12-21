@@ -19,6 +19,9 @@ struct WageAppView: View {
             Tab("Add", systemImage: "plus") {
                 AddView()
             }
+            Tab("Settings", systemImage: "gearshape") {
+                SettingsView()
+            }
         }
     }
 }
