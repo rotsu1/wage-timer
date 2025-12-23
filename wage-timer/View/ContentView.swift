@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct WageAppView: View {
     var body: some View {
@@ -31,4 +32,5 @@ struct WageAppView: View {
 
 #Preview {
     WageAppView()
+        .modelContainer(for: [Theme.self, Language.self, Currency.self], inMemory: true)
 }
