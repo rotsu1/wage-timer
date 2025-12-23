@@ -4,6 +4,7 @@
 //
 //  Created by 乙津　龍　 on 18/12/2025.
 //
+
 import SwiftUI
 
 struct HomeView: View {
@@ -27,11 +28,9 @@ struct HomeView: View {
                 ScrollView {
                     SummaryView()
                         .padding(.horizontal, 16)
-                        .frame(
-                            minHeight: 100,
-                            maxHeight: 350)
+
                     TodaysAppsView()
-                        .padding([.top, .horizontal], 16)
+                        .padding(.horizontal, 16)
                     
                     Spacer()
                 }

@@ -34,3 +34,12 @@ class Currency {
         self.currency = currency
     }
 }
+
+@Model
+class Wage {
+    var wage: String
+
+    init(wage: String) {
+        self.wage = wage
+    }
+}

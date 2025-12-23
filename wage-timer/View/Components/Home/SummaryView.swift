@@ -43,7 +43,7 @@ struct SummaryView: View {
                 Spacer()
                 VStack {
                     VStack {
-                        Text("前週比　+432%")
+                        Text("前週比 +432%")
                             .fontWeight(.bold)
                     }
                     .padding(.all, 8)
@@ -56,7 +56,7 @@ struct SummaryView: View {
                             .fill(Color.rgbo(red: 242, green: 118, blue: 118, opacity: 0.3))
                     )
                     VStack {
-                        Text("前月比　+100%")
+                        Text("前月比 +100%")
                             .fontWeight(.bold)
                     }
                     .padding(.all, 8)
@@ -91,7 +91,6 @@ struct SummaryView: View {
                 .fill(Color.rgbo(red: 242, green: 118, blue: 118, opacity: 0.1))
         )
         .foregroundStyle(.white)
-        
     }
 }
 

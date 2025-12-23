@@ -6,29 +6,28 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct SettingsView: View {
     var body: some View {
-        NavigationStack {
-            ZStack {
-                backgroundGradient
-                    .ignoresSafeArea()
-                VStack {
-                    HStack {
-                        VStack {
-                            Text("  ")
-                        }
-                        Spacer()
-                        Text("マイナス時給")
-                            .foregroundStyle(.white)
-                        Spacer()
-                        Image(systemName: "bell")
-                            .foregroundStyle(.white)
+        ZStack {
+            backgroundGradient
+                .ignoresSafeArea()
+            VStack {
+                HStack {
+                    VStack {
+                        Text("  ")
                     }
-                    .padding()
-                    
-                    SettingsListView()
+                    Spacer()
+                    Text("マイナス時給")
+                        .foregroundStyle(.white)
+                    Spacer()
+                    Image(systemName: "bell")
+                        .foregroundStyle(.white)
                 }
+                .padding()
+                
+                SettingsListView()
             }
         }
     }
@@ -36,4 +35,5 @@ struct SettingsView: View {
 
 #Preview {
     SettingsView()
+        .modelContainer(for: [Theme.self, Language.self, Currency.self, Wage.self], inMemory: true)
 }

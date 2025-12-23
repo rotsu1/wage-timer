@@ -10,21 +10,23 @@ import SwiftData
 
 struct WageAppView: View {
     var body: some View {
-        TabView {
-            Tab("Home", systemImage: "house") {
-                HomeView()
-            }
-            Tab("Calendar", systemImage: "calendar") {
-                CalendarView()
-            }
-            Tab("Add", systemImage: "plus") {
-                AddView()
-            }
-            Tab("Analysis", systemImage: "chart.xyaxis.line") {
-                AnalysisView()
-            }
-            Tab("Settings", systemImage: "gearshape") {
-                SettingsView()
+        NavigationStack {
+            TabView {
+                Tab("Home", systemImage: "house") {
+                    HomeView()
+                }
+                Tab("Calendar", systemImage: "calendar") {
+                    CalendarView()
+                }
+                Tab("Add", systemImage: "plus") {
+                    AddView()
+                }
+                Tab("Analysis", systemImage: "chart.xyaxis.line") {
+                    AnalysisView()
+                }
+                Tab("Settings", systemImage: "gearshape") {
+                    SettingsView()
+                }
             }
         }
     }
@@ -32,5 +34,5 @@ struct WageAppView: View {
 
 #Preview {
     WageAppView()
-        .modelContainer(for: [Theme.self, Language.self, Currency.self], inMemory: true)
+        .modelContainer(for: [Theme.self, Language.self, Currency.self, Wage.self], inMemory: true)
 }

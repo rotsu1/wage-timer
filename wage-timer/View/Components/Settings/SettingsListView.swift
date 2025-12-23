@@ -13,6 +13,7 @@ struct SettingsListView: View {
     @Query private var themes: [Theme]
     @Query private var languages: [Language]
     @Query private var currencies: [Currency]
+    @Query private var wage: [Wage]
 
     let languageDict = [
         "英語": "english",
@@ -61,11 +62,11 @@ struct SettingsListView: View {
             }
             Section {
                 ZStack {
-                    NavigationLink(destination: NotificationView()) {
+                    NavigationLink(destination: WageSettingsView()) {
                         EmptyView()
                     }
-
-                    navRow(image: "yensign.arrow.trianglehead.counterclockwise.rotate.90", title: "時給", details: "¥1000")                }
+                    navRow(image: "yensign.arrow.trianglehead.counterclockwise.rotate.90", title: "時給", details: "¥\(wageDisplay(wage: wage))")                
+                }
 
                 ZStack {
                     NavigationLink(destination: NotificationView()) {
@@ -146,6 +147,15 @@ extension SettingsListView {
             }
         )
     }
+
+    private func wageDisplay(wage: [Wage]) -> String {
+        let wage = wage.first
+        if let existingWage = wage {
+            return existingWage.wage
+        } else {
+            return "1000"
+        }
+    }
 }
 
 func pickerRow(image: String, title: String, values: [String: String], bind: Binding<String>) -> some View {
@@ -188,5 +198,5 @@ func navRow(image: String, title: String, details: String) -> some View {
 
 #Preview {
     SettingsListView()
-        .modelContainer(for: [Theme.self, Language.self, Currency.self], inMemory: true)
+        .modelContainer(for: [Theme.self, Language.self, Currency.self, Wage.self], inMemory: true)
 }
