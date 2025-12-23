@@ -14,6 +14,25 @@ struct SettingsListView: View {
     @Query private var languages: [Language]
     @Query private var currencies: [Currency]
 
+    let languageDict = [
+        "英語": "english",
+        "日本語": "japanese"
+    ]
+    let currecyDict = [
+        "日本円": "jpy",
+        "米ドル": "usd",
+        "ユーロ": "eur",
+        "英国ポンド": "gbp",
+        "オーストラリアドル": "aud",
+        "カナダドル": "cad",
+        "スイスフラン": "chf"
+    ]
+    let themeDict = [
+        "自動": "system",
+        "ライト": "light",
+        "ダーク": "dark"
+    ]
+
     var body: some View {
         Form {
             Section {
@@ -41,99 +60,41 @@ struct SettingsListView: View {
                 .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
             }
             Section {
-                HStack {
-                    HStack {
-                        Image(systemName: "yensign.arrow.trianglehead.counterclockwise.rotate.90")
-                        Text("時給")
+                ZStack {
+                    NavigationLink(destination: NotificationView()) {
+                        EmptyView()
                     }
-                    Spacer()
-                    HStack {
-                        Text("¥1000")
-                        Image(systemName: "chevron.right")
+
+                    navRow(image: "yensign.arrow.trianglehead.counterclockwise.rotate.90", title: "時給", details: "¥1000")                }
+
+                ZStack {
+                    NavigationLink(destination: NotificationView()) {
+                        EmptyView()
                     }
-                    .fontWeight(.light)
-                    .foregroundStyle(Color.rgbo(red: 179, green: 179, blue: 179, opacity: 1))
+                    navRow(image: "bell", title: "通知", details: "")
                 }
-                HStack {
-                    HStack {
-                        Image(systemName: "yensign")
-                        Text("通貨")
-                    }
-                    Spacer()
-                    Picker("", selection: currencyBinding) {
-                        Text("日本円").tag("jpy")
-                        Text("米ドル").tag("usd")
-                        Text("ユーロ").tag("eur")
-                        Text("英国ポンド").tag("gbp")
-                        Text("オーストラリアドル").tag("aud")
-                        Text("カナダドル").tag("cad")
-                        Text("スイスフラン").tag("chf")
-                    }
-                    .pickerStyle(.menu)
-                    .tint(Color.rgbo(red: 179, green: 179, blue: 179, opacity: 1))
-                    .fontWeight(.light)
-                }
-                HStack {
-                    HStack {
-                        Image(systemName: "globe")
-                        Text("言語")
-                    }
-                    Spacer()
-                    Picker("", selection: languageBinding) {
-                        Text("英語").tag("english")
-                        Text("日本語").tag("japanese")
-                    }
-                    .pickerStyle(.menu)
-                    .tint(Color.rgbo(red: 179, green: 179, blue: 179, opacity: 1))
-                    .fontWeight(.light)
-                }
-                HStack {
-                    HStack {
-                        Image(systemName: "circle.righthalf.filled")
-                        Text("外観モード")
-                    }
-                    Spacer()
-                    Picker("", selection: themeBinding) {
-                        Text("自動").tag("system")
-                        Text("ライト").tag("light")
-                        Text("ダーク").tag("dark")
-                    }
-                    .pickerStyle(.menu)
-                    .tint(Color.rgbo(red: 179, green: 179, blue: 179, opacity: 1))
-                    .fontWeight(.light)
-                }
-                HStack {
-                    HStack {
-                        Image(systemName: "bell")
-                        Text("通知")
-                    }
-                    Spacer()
-                    Image(systemName: "chevron.right")
-                        .fontWeight(.light)
-                        .foregroundStyle(Color.rgbo(red: 179, green: 179, blue: 179, opacity: 1))
-                }
+                
+                pickerRow(image: "yensign", title: "通貨", values: currecyDict, bind: currencyBinding)
+
+                pickerRow(image: "globe", title: "言語", values: languageDict, bind: languageBinding)
+
+                pickerRow(image: "circle.righthalf.filled", title: "外観モード", values: themeDict, bind: themeBinding)
+
             } header: {
                 Text("アプリ")
                 .foregroundStyle(.white)
             }
             .listRowBackground(Color.rgbo(red: 64, green: 64, blue: 64, opacity: 1))
-            .foregroundStyle(.white)
 
             Section {
-                HStack {
-                    HStack {
-                        Image(systemName: "questionmark")
-                        Text("ヘルプ・使い方")
+                ZStack {
+                    NavigationLink(destination: NotificationView()) {
+                        EmptyView()
                     }
-                    Spacer()
-                    Image(systemName: "chevron.right")
-                        .fontWeight(.light)
-                        .foregroundStyle(Color.rgbo(red: 179, green: 179, blue: 179, opacity: 1))
+                    navRow(image: "questionmark", title: "ヘルプ・使い方", details: "")
                 }
             }
             .listRowBackground(Color.rgbo(red: 64, green: 64, blue: 64, opacity: 1))
-            .foregroundStyle(.white)
-
         }
         .scrollContentBackground(.hidden)
     }
@@ -184,6 +145,44 @@ extension SettingsListView {
                 try? modelContext.save()
             }
         )
+    }
+}
+
+func pickerRow(image: String, title: String, values: [String: String], bind: Binding<String>) -> some View {
+    HStack {
+        HStack {
+            Image(systemName: image)
+            Text(title)
+        }
+        .foregroundStyle(.white)
+        Spacer()
+        Picker("", selection: bind) {
+            ForEach(values.keys.sorted(), id: \.self) { key in
+                if let value = values[key] {
+                    Text(key).tag(value)
+                }
+            }
+        }
+        .pickerStyle(.menu)
+        .tint(Color.rgbo(red: 179, green: 179, blue: 179, opacity: 1))
+        .fontWeight(.light)
+    }
+}
+
+func navRow(image: String, title: String, details: String) -> some View {
+    HStack {
+        HStack {
+            Image(systemName: image)
+            Text(title)
+        }
+        .foregroundStyle(.white)
+        Spacer()
+        HStack {
+            Text(details)
+            Image(systemName: "chevron.right")
+        }
+        .fontWeight(.light)
+        .foregroundStyle(Color.rgbo(red: 179, green: 179, blue: 179, opacity: 1))
     }
 }
 
