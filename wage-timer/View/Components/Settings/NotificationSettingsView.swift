@@ -1,5 +1,5 @@
 //
-//  NotificationView.swift
+//  NotificationSettingsView.swift
 //  wage-timer
 //
 //  Created by 乙津　龍　 on 21/12/2025.
@@ -7,7 +7,7 @@
 import SwiftUI
 import SwiftData
 
-struct NotificationView: View {
+struct NotificationSettingsView: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var notifications: [Notification]
 
@@ -81,7 +81,7 @@ struct NotificationView: View {
     }
 }
 
-extension NotificationView {
+extension NotificationSettingsView {
     var weeklyToggleBinding: Binding<Bool> {
         let notification = notifications.first
 
@@ -196,5 +196,5 @@ extension NotificationView {
 }
 
 #Preview {
-    NotificationView()
+    NotificationSettingsView()
 }

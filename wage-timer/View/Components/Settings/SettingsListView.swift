@@ -69,7 +69,7 @@ struct SettingsListView: View {
                 }
 
                 ZStack {
-                    NavigationLink(destination: NotificationView()) {
+                    NavigationLink(destination: NotificationSettingsView()) {
                         EmptyView()
                     }
                     navRow(image: "bell", title: "通知", details: "")
@@ -89,7 +89,7 @@ struct SettingsListView: View {
 
             Section {
                 ZStack {
-                    NavigationLink(destination: NotificationView()) {
+                    NavigationLink(destination: NotificationSettingsView()) {
                         EmptyView()
                     }
                     navRow(image: "questionmark", title: "ヘルプ・使い方", details: "")
