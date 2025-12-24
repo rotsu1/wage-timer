@@ -13,18 +13,8 @@ struct CalendarView: View {
             backgroundGradient
                 .ignoresSafeArea()
             VStack {
-                HStack {
-                    VStack {
-                        Text("  ")
-                    }
-                    Spacer()
-                    Text("マイナス時給")
-                        .foregroundStyle(.white)
-                    Spacer()
-                    Image(systemName: "bell")
-                        .foregroundStyle(.white)
-                }
-                .padding()
+                HeaderView(title: "カレンダー")
+
                 ScrollView {                
                     CalendarComponentView()
                         .padding(.horizontal, 16)

@@ -12,18 +12,8 @@ struct AddView: View {
             backgroundGradient
                 .ignoresSafeArea()
             VStack {
-                HStack {
-                    VStack {
-                        Text("  ")
-                    }
-                    Spacer()
-                    Text("マイナス時給")
-                        .foregroundStyle(.white)
-                    Spacer()
-                    Image(systemName: "bell")
-                        .foregroundStyle(.white)
-                }
-                .padding()
+                HeaderView(title: "マイナス時給")
+
                 ScrollView {
                     AddInputView()
                         .padding(.horizontal, 16)

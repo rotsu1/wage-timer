@@ -45,7 +45,7 @@ class Wage {
 }
 
 @Model
-class Notification {
+class NotificationSettings {
     var weekly: Bool
     var dayOfWeek: String
     var weeklyTime: Date

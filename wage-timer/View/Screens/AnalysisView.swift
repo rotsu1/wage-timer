@@ -13,18 +13,8 @@ struct AnalysisView: View {
             backgroundGradient
                 .ignoresSafeArea()
             VStack {
-                HStack {
-                    VStack {
-                        Text("  ")
-                    }
-                    Spacer()
-                    Text("マイナス時給")
-                        .foregroundStyle(.white)
-                    Spacer()
-                    Image(systemName: "bell")
-                        .foregroundStyle(.white)
-                }
-                .padding()
+                HeaderView(title: "分析")
+                
                 ScrollView {
                     PeriodView()
                         .padding(.horizontal, 16)

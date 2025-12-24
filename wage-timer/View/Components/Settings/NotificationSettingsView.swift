@@ -9,7 +9,7 @@ import SwiftData
 
 struct NotificationSettingsView: View {
     @Environment(\.modelContext) private var modelContext
-    @Query private var notifications: [Notification]
+    @Query private var notifications: [NotificationSettings]
 
     let dayOfWeek = [
         ("月曜日", "mon"), 
@@ -183,7 +183,7 @@ extension NotificationSettingsView {
 
     func addNotification() {
         modelContext.insert(
-            Notification(
+            NotificationSettings(
                 weekly: true, 
                 dayOfWeek: "sun", 
                 weeklyTime: Calendar.current.date(from: DateComponents(hour: 20, minute: 0))! ,

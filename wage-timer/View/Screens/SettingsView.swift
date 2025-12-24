@@ -14,18 +14,7 @@ struct SettingsView: View {
             backgroundGradient
                 .ignoresSafeArea()
             VStack {
-                HStack {
-                    VStack {
-                        Text("  ")
-                    }
-                    Spacer()
-                    Text("マイナス時給")
-                        .foregroundStyle(.white)
-                    Spacer()
-                    Image(systemName: "bell")
-                        .foregroundStyle(.white)
-                }
-                .padding()
+                HeaderView(title: "設定")
                 
                 SettingsListView()
             }
