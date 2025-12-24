@@ -16,22 +16,22 @@ struct SettingsListView: View {
     @Query private var wage: [Wage]
 
     let languageDict = [
-        "英語": "english",
-        "日本語": "japanese"
+        ("英語", "english"),
+        ("日本語", "japanese")
     ]
     let currecyDict = [
-        "日本円": "jpy",
-        "米ドル": "usd",
-        "ユーロ": "eur",
-        "英国ポンド": "gbp",
-        "オーストラリアドル": "aud",
-        "カナダドル": "cad",
-        "スイスフラン": "chf"
+        ("日本円", "jpy"),
+        ("米ドル", "usd"),
+        ("ユーロ", "eur"),
+        ("英国ポンド", "gbp"),
+        ("オーストラリアドル", "aud"),
+        ("カナダドル", "cad"),
+        ("スイスフラン", "chf")
     ]
     let themeDict = [
-        "自動": "system",
-        "ライト": "light",
-        "ダーク": "dark"
+        ("自動", "system"),
+        ("ライト", "light"),
+        ("ダーク", "dark")
     ]
 
     var body: some View {
@@ -155,27 +155,6 @@ extension SettingsListView {
         } else {
             return "1000"
         }
-    }
-}
-
-func pickerRow(image: String, title: String, values: [String: String], bind: Binding<String>) -> some View {
-    HStack {
-        HStack {
-            Image(systemName: image)
-            Text(title)
-        }
-        .foregroundStyle(.white)
-        Spacer()
-        Picker("", selection: bind) {
-            ForEach(values.keys.sorted(), id: \.self) { key in
-                if let value = values[key] {
-                    Text(key).tag(value)
-                }
-            }
-        }
-        .pickerStyle(.menu)
-        .tint(Color.rgbo(red: 179, green: 179, blue: 179, opacity: 1))
-        .fontWeight(.light)
     }
 }
 
