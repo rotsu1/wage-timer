@@ -4,8 +4,8 @@
 //
 //  Created by 乙津　龍　 on 15/12/2025.
 //
-
 import SwiftUI
+import SwiftData
 
 private func card(title: String, money: String, description: String) -> some View {
     VStack(alignment: .leading) {

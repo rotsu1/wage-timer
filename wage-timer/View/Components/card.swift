@@ -16,6 +16,7 @@ func card(title: String, time: String, occurance: String, money: String) -> some
                 .font(.subheadline)
                 .fontWeight(.thin)
         }
+        Spacer()
         VStack {
             Text(money)
         }

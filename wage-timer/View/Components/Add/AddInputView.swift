@@ -18,6 +18,7 @@ struct AddInputView: View {
     @FocusState private var isFocused: Bool
 
     @State private var showWarning: Bool = false
+    @State private var showSuccess: Bool = false
 
     var formatter: DateFormatter {
         let formatter = DateFormatter()
@@ -146,6 +147,19 @@ struct AddInputView: View {
                     .transition(.move(edge: .top).combined(with: .opacity))
             }
         }
+        .overlay(alignment: .top) {
+            if showSuccess {
+                Text("新しい記録が保存されました")
+                    .padding()
+                    .background(
+                        RoundedRectangle(cornerRadius: 12)
+                            .fill(Color.green.opacity(0.9))
+                    )
+                    .foregroundColor(.white)
+                    .padding(.top, 16) // spacing from top
+                    .transition(.move(edge: .top).combined(with: .opacity))
+            }
+        }
         .animation(.easeInOut, value: showWarning)
         .background(
             RoundedRectangle(cornerRadius: 20)
@@ -172,12 +186,18 @@ extension AddInputView {
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
                 showWarning = false
             }
-
             return
         } else {
             let timeInt: Int = Int(time) ?? 0
             modelContext.insert(Record(name: appName, startDate: date, time: timeInt))
             try? modelContext.save()
+            appName = ""
+            time = ""
+            showSuccess = true
+
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                showSuccess = false
+            }
         }
     }
 }
