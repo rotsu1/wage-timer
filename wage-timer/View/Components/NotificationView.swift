@@ -54,7 +54,7 @@ struct NotificationView: View {
 
 func notificationCard(notification: Notification) -> some View {
     let formatter = DateFormatter()
-    formatter.dateFormat = "yyyy:MM:dd"
+    formatter.dateFormat = "yyyy/MM/dd"
     let dateString = formatter.string(from: notification.date)
 
     return HStack {

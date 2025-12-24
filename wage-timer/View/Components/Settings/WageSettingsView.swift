@@ -39,6 +39,7 @@ struct WageSettingsView: View {
                                     try? modelContext.save()
                                 }
                             ))
+                            .keyboardType(.numberPad)
                         }
                         .padding()
                         .overlay(

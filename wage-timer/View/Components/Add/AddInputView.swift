@@ -5,8 +5,28 @@
 //  Created by 乙津　龍　 on 21/12/2025.
 //
 import SwiftUI
+import SwiftData
 
 struct AddInputView: View {
+    @Environment(\.modelContext) private var modelContext
+    @Query private var records: [Record]
+
+    @State private var dateString: String = ""
+    @State private var date: Date = Date()
+    @State private var appName: String = ""
+    @State private var time: String = ""
+    @FocusState private var isFocused: Bool
+
+    @State private var showWarning: Bool = false
+
+    var formatter: DateFormatter {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy/MM/dd"
+        formatter.locale = Locale(identifier: "en_US_POSIX") // ensures consistent parsing
+        formatter.timeZone = TimeZone(secondsFromGMT: 0)
+        return formatter
+    }
+
     var body: some View {
         VStack {
             HStack {
@@ -22,14 +42,37 @@ struct AddInputView: View {
                     Spacer()
                 }
                 HStack {
-                    Text("2025/12/12")
+                    TextField("", text: $dateString)
+                        .focused($isFocused)
+                        .onAppear {
+                            dateString = formatter.string(from: date)
+                        }
+                        .onChange(of: isFocused) {
+                            if !isFocused {
+                                if let newDate = formatter.date(from: dateString) {
+                                    date = newDate
+                                    dateString = formatter.string(from: date)
+                                } else {
+                                    dateString = formatter.string(from: date)
+                                }
+                            }
+                        }
                     Spacer()
-                    Image(systemName: "calendar")
+                    ZStack(alignment: .trailing) {
+                        Image(systemName: "calendar")
+                        DatePicker(
+                            "",
+                            selection: datePickerBinding,
+                            displayedComponents: [.date]
+                        )
+                        .colorMultiply(.clear)
+                    }
                 }
                 .padding()
                 .overlay(
                     RoundedRectangle(cornerRadius: 20)
                         .stroke(Color.rgbo(red: 242, green: 118, blue: 118, opacity: 0.3))
+                    
                 )
                 .background(
                     RoundedRectangle(cornerRadius: 20)
@@ -42,10 +85,8 @@ struct AddInputView: View {
                     Text("アプリ名")
                     Spacer()
                 }
-                HStack {
-                    Text("例:インスタ")
-                    Spacer()
-                }
+                TextField("例: インスタ", text: $appName)
+                .keyboardType(.numberPad)
                 .padding()
                 .overlay(
                     RoundedRectangle(cornerRadius: 20)
@@ -62,10 +103,7 @@ struct AddInputView: View {
                     Text("使用時間（分）")
                     Spacer()
                 }
-                HStack {
-                    Text("例：120")
-                    Spacer()
-                }
+                TextField("例: 120", text: $time)
                 .padding()
                 .overlay(
                     RoundedRectangle(cornerRadius: 20)
@@ -78,12 +116,14 @@ struct AddInputView: View {
             }
            .padding(.horizontal, 16)
             HStack {
-                Text("保存")
-                    .frame(maxWidth: 100, minHeight: 40)
-                    .background(
-                        RoundedRectangle(cornerRadius: 20)
-                            .fill(.blue)
-                    )
+                Button(action: save) {
+                    Text("保存")
+                        .frame(maxWidth: 100, minHeight: 40)
+                        .background(
+                            RoundedRectangle(cornerRadius: 20)
+                                .fill(.blue)
+                        )
+                }
                 Spacer()
             }
             .padding()
@@ -93,10 +133,52 @@ struct AddInputView: View {
             RoundedRectangle(cornerRadius: 20)
                 .stroke(Color.rgbo(red: 242, green: 118, blue: 118, opacity: 0.3))
         )
+        .overlay(alignment: .top) {
+            if showWarning {
+                Text("未入力の欄があります")
+                    .padding()
+                    .background(
+                        RoundedRectangle(cornerRadius: 12)
+                            .fill(Color.red.opacity(0.9))
+                    )
+                    .foregroundColor(.white)
+                    .padding(.top, 16) // spacing from top
+                    .transition(.move(edge: .top).combined(with: .opacity))
+            }
+        }
+        .animation(.easeInOut, value: showWarning)
         .background(
             RoundedRectangle(cornerRadius: 20)
                 .fill(Color.rgbo(red: 242, green: 118, blue: 118, opacity: 0.1))
         )
+    }
+}
+
+extension AddInputView {
+    var datePickerBinding: Binding<Date> {
+        return Binding(
+            get: { date },
+            set: { newValue in
+                date = newValue
+                dateString = formatter.string(from: newValue)
+            }
+        )
+    }
+
+    func save() -> Void {
+        if appName.isEmpty || time.isEmpty {
+            showWarning = true
+
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                showWarning = false
+            }
+
+            return
+        } else {
+            let timeInt: Int = Int(time) ?? 0
+            modelContext.insert(Record(name: appName, startDate: date, time: timeInt))
+            try? modelContext.save()
+        }
     }
 }
 
