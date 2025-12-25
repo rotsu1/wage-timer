@@ -7,47 +7,9 @@
 import SwiftUI
 import SwiftData
 
-struct RecordSummary: Identifiable {
-    let id = UUID()
-    let name: String
-    let totalTime: Int
-    let occurance: Int
-}
-
 struct TodaysAppsView: View {
-    @Environment(\.modelContext) private var modelContext
-    @Query private var wages: [Wage]
-
-    private static let calendar = Calendar.current
-    private static let startOfToday = calendar.startOfDay(for: Date())
-    private static let startOfTomorrow = calendar.date(byAdding: .day, value: 1, to: startOfToday)!
-
-    @Query(
-        filter: #Predicate<Record> {
-            $0.startDate >= startOfToday &&
-            $0.startDate < startOfTomorrow
-        }
-    )
-    private var todayRecords: [Record]
-
-    var wage: Int {
-        if let existingWage = wages.first {
-            return Int(existingWage.wage) ?? 1000
-        }
-        return 1000
-    }
-
-    var groupedRecords: [RecordSummary] {
-        let grouped = Dictionary(grouping: todayRecords, by: { $0.name })
-        
-        return grouped.map { (name, records) in
-            RecordSummary(
-                name: name,
-                totalTime: records.reduce(0) { $0 + $1.time },
-                occurance: records.count
-            )
-        }
-    }
+    var todayRecords: [Record]
+    var wage: Int
 
     var body: some View {
         VStack() {
@@ -57,10 +19,10 @@ struct TodaysAppsView: View {
                     .fontWeight(.bold)
                 Spacer()
             }
-            ForEach(groupedRecords) { record in 
+            ForEach(groupRecordsByName(records: todayRecords)) { record in 
                 card(
                     title: record.name, 
-                    time: toTime(time: record.totalTime), 
+                    time: timeToString(time: record.totalTime), 
                     occurance: String(record.occurance), 
                     money: lossToString(time: record.totalTime, wage: wage)
                 )
@@ -81,5 +43,5 @@ struct TodaysAppsView: View {
 }
 
 #Preview {
-    TodaysAppsView()
+    TodaysAppsView(todayRecords: [], wage: 1000)
 }
