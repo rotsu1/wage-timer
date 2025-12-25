@@ -79,7 +79,7 @@ func groupRecordsByDay(records: [Record]) -> [RecordSummary] {
             occurance: records.count
         )
     }
-    .sorted { Int($0.name)! < Int($1.name)! }
+    .sorted { $0.name < $1.name }
 }
 
 func groupRecordsByMonth(records: [Record]) -> [RecordSummary] {
