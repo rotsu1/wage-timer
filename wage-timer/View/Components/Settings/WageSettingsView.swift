@@ -30,6 +30,8 @@ struct WageSettingsView: View {
                             TextField("", text: Binding(
                                 get: { wages.first?.wage ?? "1000" },
                                 set: { newValue in
+                                    guard !newValue.isEmpty else { return }
+                                    
                                     if let existingWage = wages.first {
                                         existingWage.wage = newValue
                                     } else {
