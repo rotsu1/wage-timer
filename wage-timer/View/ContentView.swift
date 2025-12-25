@@ -24,7 +24,7 @@ struct WageAppView: View {
                     AddView(records: records)
                 }
                 Tab("Analysis", systemImage: "chart.xyaxis.line") {
-                    AnalysisView()
+                    AnalysisView(records: records)
                 }
                 Tab("Settings", systemImage: "gearshape") {
                     SettingsView()
@@ -36,5 +36,5 @@ struct WageAppView: View {
 
 #Preview {
     WageAppView()
-        .modelContainer(for: [Theme.self, Language.self, Currency.self, Wage.self, NotificationSettings.self, Record.self], inMemory: true)
+        .modelContainer(for: [Theme.self, Language.self, Currency.self, Wage.self, NotificationSettings.self, Record.self, Analysis.self], inMemory: true)
 }

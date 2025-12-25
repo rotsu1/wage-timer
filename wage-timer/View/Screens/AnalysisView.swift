@@ -6,8 +6,11 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct AnalysisView: View {
+    var records: [Record]
+
     var body: some View {
         ZStack {
             backgroundGradient
@@ -20,8 +23,6 @@ struct AnalysisView: View {
                         .padding(.horizontal, 16)
                     GraphView()
                         .padding(.horizontal, 16)
-                    CategoryView()
-                        .padding(.horizontal, 16)
                     
                     Spacer()
                 }
@@ -30,6 +31,6 @@ struct AnalysisView: View {
     }
 }
 
-#Preview {
-    AnalysisView()
-}
+// #Preview {
+//     AnalysisView()
+// }

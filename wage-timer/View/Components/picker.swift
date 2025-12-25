@@ -6,7 +6,13 @@
 //
 import SwiftUI
 
-func pickerRow(image: String, title: String, values: [(key: String, value: String)], bind: Binding<String>) -> some View {
+func pickerRow<T: Hashable>(
+    image: String, 
+    title: String, 
+    values: [(key: String, value: T)], 
+    bind: Binding<T>,
+    color: Color = Color.rgbo(red: 179, green: 179, blue: 179, opacity: 1)
+) -> some View {
     HStack {
         HStack {
             if !image.isEmpty {
@@ -22,7 +28,7 @@ func pickerRow(image: String, title: String, values: [(key: String, value: Strin
             }
         }
         .pickerStyle(.menu)
-        .tint(Color.rgbo(red: 179, green: 179, blue: 179, opacity: 1))
+        .tint(color)
         .fontWeight(.light)
     }
 }
