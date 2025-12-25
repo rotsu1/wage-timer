@@ -7,6 +7,8 @@
 import SwiftUI
 
 struct AddView: View {
+    var records: [Record]
+
     var body: some View {
         ZStack {
             backgroundGradient
@@ -15,7 +17,7 @@ struct AddView: View {
                 HeaderView(title: "マイナス時給")
 
                 ScrollView {
-                    AddInputView()
+                    AddInputView(records: records)
                         .padding(.horizontal, 16)
                 }
             }
@@ -23,6 +25,6 @@ struct AddView: View {
     }
 }
 
-#Preview {
-    AddView()
-}
+//#Preview {
+//    AddView()
+//}

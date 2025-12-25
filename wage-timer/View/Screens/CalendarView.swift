@@ -4,10 +4,13 @@
 //
 //  Created by 乙津　龍　 on 18/12/2025.
 //
-
 import SwiftUI
 
 struct CalendarView: View {
+    @State private var date: Date = Date()
+
+    var records: [Record]
+
     var body: some View {
         ZStack {
             backgroundGradient
@@ -16,9 +19,9 @@ struct CalendarView: View {
                 HeaderView(title: "カレンダー")
 
                 ScrollView {                
-                    CalendarComponentView()
+                    CalendarComponentView(currentDate: $date, records: records)
                         .padding(.horizontal, 16)
-                    CalendarDaySummaryView()
+                    CalendarDaySummaryView(currentDate: $date, records: records)
                         .padding(.horizontal, 16)
                     
                     Spacer()
@@ -28,6 +31,6 @@ struct CalendarView: View {
     }
 }
 
-#Preview {
-    CalendarView()
-}
+//#Preview {
+//    CalendarView()
+//}

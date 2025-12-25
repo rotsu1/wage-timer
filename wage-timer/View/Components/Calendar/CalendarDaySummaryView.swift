@@ -6,23 +6,50 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct CalendarDaySummaryView: View {
+    @Query private var wages: [Wage]
+    var wage: Int {
+        if let existingWage = wages.first {
+            return Int(existingWage.wage) ?? 1000
+        }
+        return 1000
+    }
+
+    @Binding var currentDate: Date
+    var records: [Record]
+
+    var filter: RecordFilter { RecordFilter(records: records, currentDate: currentDate) }
+
+    let formatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy年MM月dd日"
+        return formatter
+    }()
+
     var body: some View {
         VStack {
             HStack {
-                Text("2025年4月12日")
+                Text(formatter.string(from: currentDate))
                     .font(.headline)
                     .fontWeight(.bold)
                 Spacer()
             }
             HStack {
-                Text("損失: -¥10000")
+                let todayTime = filter.today.reduce(0) { $0 + $1.time }
+                Text("損失: \(lossToString(time: todayTime, wage: wage))")
                 Spacer()
             }
-            card(title: "YouTube", time: "6h 20m", occurance: "9", money: "-¥1000")
-            card(title: "Instagram", time: "6h 20m", occurance: "9", money: "-¥1000")
-            card(title: "X", time: "6h 20m", occurance: "9", money: "-¥1000")
+            ForEach(groupRecordsByName(records: filter.today)) { record in
+                card(
+                    title: record.name,
+                    time: timeToString(time: record.totalTime),
+                    occurance: String(record.occurance),
+                    money: lossToString(time: record.totalTime, wage: wage)
+                )
+            }
+
         }
         .padding()
         .overlay(
@@ -37,6 +64,6 @@ struct CalendarDaySummaryView: View {
     }
 }
 
-#Preview {
-    CalendarDaySummaryView()
-}
+//#Preview {
+//    CalendarDaySummaryView()
+//}

@@ -9,17 +9,19 @@ import SwiftUI
 import SwiftData
 
 struct WageAppView: View {
+    @Query private var records: [Record]
+
     var body: some View {
         NavigationStack {
             TabView {
                 Tab("Home", systemImage: "house") {
-                    HomeView()
+                    HomeView(records: records)
                 }
                 Tab("Calendar", systemImage: "calendar") {
-                    CalendarView()
+                    CalendarView(records: records)
                 }
                 Tab("Add", systemImage: "plus") {
-                    AddView()
+                    AddView(records: records)
                 }
                 Tab("Analysis", systemImage: "chart.xyaxis.line") {
                     AnalysisView()

@@ -9,7 +9,13 @@ import SwiftData
 
 struct TodaysAppsView: View {
     var todayRecords: [Record]
-    var wage: Int
+    @Query private var wages: [Wage]
+    var wage: Int {
+        if let existingWage = wages.first {
+            return Int(existingWage.wage) ?? 1000
+        }
+        return 1000
+    }
 
     var body: some View {
         VStack() {
@@ -42,6 +48,6 @@ struct TodaysAppsView: View {
     }
 }
 
-#Preview {
-    TodaysAppsView(todayRecords: [], wage: 1000)
-}
+//#Preview {
+//    TodaysAppsView(todayRecords: [])
+//}

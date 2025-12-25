@@ -9,7 +9,7 @@ import SwiftData
 
 struct AddInputView: View {
     @Environment(\.modelContext) private var modelContext
-    @Query private var records: [Record]
+    var records: [Record]
 
     @State private var dateString: String = ""
     @State private var date: Date = Date()
@@ -202,6 +202,6 @@ extension AddInputView {
     }
 }
 
-#Preview {
-    AddInputView()
-}
+//#Preview {
+//    AddInputView()
+//}

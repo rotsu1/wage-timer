@@ -4,46 +4,61 @@
 //
 //  Created by 乙津　龍　 on 18/12/2025.
 //
-
 import SwiftUI
+import SwiftData
 
 let numberOfCells = 6 * 7
 
 struct CalendarComponentView: View {
-    var calendar: Calendar { Calendar.current }
-    var now: Date { Date() }
-    var day: String { now.formatted(Date.FormatStyle().day(.defaultDigits)) }
-    var month: String { now.formatted(Date.FormatStyle().month(.defaultDigits)) }
-    var year: String { now.formatted(Date.FormatStyle().year(.defaultDigits)) }
-    var firstDayOfMonthWeekday: Int {
-        var components = DateComponents()
-        components.year = Int(year)
-        components.month = Int(month)
-        components.day = 1
+    @Binding var currentDate: Date
+    var records: [Record]
 
-        var weekday = 0
-        if let date = calendar.date(from: components) {
-            // 2. Ask the calendar for the weekday of that date
-            weekday = calendar.component(.weekday, from: date)
+    var filter: RecordFilter { RecordFilter(records: records, currentDate: currentDate) }
+
+    var calendarHelper: CalendarHelper { CalendarHelper(currentDate: currentDate) }
+
+    func changeMonth(_ value: Int) -> Void {
+        let calendar = Calendar.current
+        if let nextMonth = calendar.date(byAdding: .month, value: value, to: currentDate) {
+            let start = calendar.dateInterval(of: .month, for: nextMonth)?.start ?? nextMonth
+            currentDate = start
         }
-        return weekday
     }
-    var numberOfDays: Array<Int> { Array(calendar.range(of: .day, in: .month, for: now) ?? 1..<1) }
-    let weekdays = ["日", "月", "火", "水", "木", "金", "土"]
-    let columns = Array(repeating: GridItem(.flexible()), count: 7)
-    
+
+    func changeDay(_ day: Int) -> Void {
+        let calendar = Calendar.current
+        var components = calendar.dateComponents([.year, .month], from: currentDate)
+        components.day = day
+
+        currentDate = calendar.date(from: components) ?? currentDate
+    }
+
+    let formatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy年MM月"
+        return formatter
+    }()
+     
     var body: some View {
         VStack {
             HStack {
-                Image(systemName: "arrow.left")
+                Button {
+                    changeMonth(-1)
+                } label: {
+                    Image(systemName: "arrow.left")
+                }
                 Spacer()
-                Text("2025年12月")
+                Text(formatter.string(from: currentDate))
                 Spacer()
-                Image(systemName: "arrow.right")
+                Button {
+                    changeMonth(1)
+                } label: {
+                    Image(systemName: "arrow.right")
+                }
             }
             .padding()
-            LazyVGrid(columns: columns) {
-                ForEach(weekdays, id: \.self) { day in
+            LazyVGrid(columns: calendarHelper.columns) {
+                ForEach(calendarHelper.weekdays, id: \.self) { day in
                     VStack {
                         Spacer()
                         Text(day)
@@ -51,21 +66,42 @@ struct CalendarComponentView: View {
                     .frame(maxWidth: .infinity)
                 }
             }
-            LazyVGrid(columns: columns) {
+            LazyVGrid(columns: calendarHelper.columns) {
                 ForEach(1...numberOfCells, id: \.self) { day in
-                    if day < firstDayOfMonthWeekday {
+                    let acutualDay = day - calendarHelper.firstWeekday + 1
+                    if day < calendarHelper.firstWeekday {
                         Text("")
-                    } else if day > numberOfDays.count + firstDayOfMonthWeekday - 1 {
+                    } else if day > calendarHelper.numberOfDays.count + calendarHelper.firstWeekday - 1 {
                         Text("")
                     } else {
-                        VStack {
-                            Spacer()
-                            Text("\(day - firstDayOfMonthWeekday + 1)")
-                            Spacer()
-                            Text("")
-                            Spacer()
+                        Button {
+                            changeDay(acutualDay)
+                        } label: {
+                            let calendar = Calendar.current
+                            if acutualDay == calendar.component(.day, from: currentDate) {
+                                VStack {
+                                    Spacer()
+                                    Text("\(acutualDay)")
+                                    Spacer()
+                                    Text("")
+                                    Spacer()
+                                }
+                                .frame(maxWidth: .infinity, minHeight: 60)
+                                .background(
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .fill(Color.rgbo(red: 242, green: 118, blue: 118, opacity: 0.2))
+                                )
+                            } else {
+                                VStack {
+                                    Spacer()
+                                    Text("\(acutualDay)")
+                                    Spacer()
+                                    Text("")
+                                    Spacer()
+                                }
+                                .frame(maxWidth: .infinity, minHeight: 60)
+                            }
                         }
-                        .frame(maxWidth: .infinity, minHeight: 60)
                     }
                 }
             }
@@ -82,6 +118,6 @@ struct CalendarComponentView: View {
     }
 }
 
-#Preview {
-    CalendarComponentView()
-}
+//#Preview {
+//    CalendarComponentView()
+//}

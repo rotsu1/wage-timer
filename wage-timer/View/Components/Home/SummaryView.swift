@@ -31,12 +31,18 @@ private func homeCard(title: String, main: String, description: String) -> some 
 }
 
 struct SummaryView: View {
+    @Query private var wages: [Wage]
+    var wage: Int {
+        if let existingWage = wages.first {
+            return Int(existingWage.wage) ?? 1000
+        }
+        return 1000
+    }
     var todayRecords: [Record]
     var weeklyRecords: [Record]
     var monthlyRecords: [Record]
     var lastWeeklyRecords: [Record]
     var lastMonthlyRecords: [Record] 
-    var wage: Int
 
     private func totalTime(records: [Record]) -> Int {
         return records.reduce(0) { $0 + $1.time }
