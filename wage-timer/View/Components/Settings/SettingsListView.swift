@@ -113,7 +113,6 @@ extension SettingsListView {
                 } else {
                     modelContext.insert(Theme(theme: newValue))
                 }
-                try? modelContext.save()
             }
         )
     }
@@ -128,7 +127,6 @@ extension SettingsListView {
                 } else {
                     modelContext.insert(Language(language: newValue))
                 }
-                try? modelContext.save()
             }
         )
     }
@@ -143,7 +141,6 @@ extension SettingsListView {
                 } else {
                     modelContext.insert(Currency(currency: newValue))
                 }
-                try? modelContext.save()
             }
         )
     }

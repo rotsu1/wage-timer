@@ -32,7 +32,6 @@ struct PeriodModal: View {
                 } else {
                     modelContext.insert(Analysis(year: todayYear, month: newValue))
                 }
-                try? modelContext.save()
             }
         )
     }
@@ -85,7 +84,6 @@ struct PeriodModal: View {
                                 } else {
                                     modelContext.insert(Analysis(year: todayYear))
                                 }
-                                try? modelContext.save()
                             }
                         }
                         .keyboardType(.numberPad)

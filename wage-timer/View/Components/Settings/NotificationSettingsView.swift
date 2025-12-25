@@ -93,7 +93,6 @@ extension NotificationSettingsView {
                 } else {
                     addNotification()
                 }
-                try? modelContext.save()
             }
         )
     }
@@ -108,7 +107,6 @@ extension NotificationSettingsView {
                 } else {
                     addNotification()
                 }
-                try? modelContext.save()
             }
         )
     }
@@ -126,7 +124,6 @@ extension NotificationSettingsView {
                 } else {
                     addNotification()
                 }
-                try? modelContext.save()
             }
         )
     }
@@ -141,7 +138,6 @@ extension NotificationSettingsView {
                 } else {
                     addNotification()
                 }
-                try? modelContext.save()
             }
         )
     }
@@ -159,7 +155,6 @@ extension NotificationSettingsView {
                 } else {
                     addNotification()
                 }
-                try? modelContext.save()
             }
         )
     }
@@ -176,7 +171,6 @@ extension NotificationSettingsView {
                 } else {
                     addNotification()
                 }
-                try? modelContext.save()
             }
         )
     }

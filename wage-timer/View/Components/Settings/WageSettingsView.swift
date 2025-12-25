@@ -36,7 +36,6 @@ struct WageSettingsView: View {
                                         let new = Wage(wage: newValue)
                                         modelContext.insert(new)
                                     }
-                                    try? modelContext.save()
                                 }
                             ))
                             .keyboardType(.numberPad)
