@@ -8,14 +8,24 @@ import SwiftUI
 import SwiftData
 
 struct AddInputView: View {
+    @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
-    var records: [Record]
+    
+    var record: Record?
 
     @State private var dateString: String = ""
-    @State private var date: Date = Date()
-    @State private var appName: String = ""
-    @State private var time: String = ""
+    @State private var date: Date
+    @State private var appName: String
+    @State private var time: String
     @FocusState private var isFocused: Bool
+
+    init(record: Record? = nil) {
+        self.record = record
+
+        _date = State(initialValue: record?.startDate ?? Date())
+        _appName = State(initialValue: record?.name ?? "")
+        _time = State(initialValue: record.map { String($0.time) } ?? "")
+    }
 
     @State private var showWarning: Bool = false
     @State private var showSuccess: Bool = false
@@ -31,7 +41,7 @@ struct AddInputView: View {
     var body: some View {
         VStack {
             HStack {
-                Text("新規")
+                Text(record == nil ? "新規" : "編集")
                     .font(.headline)
                     .fontWeight(.bold)
                 Spacer()
@@ -118,7 +128,7 @@ struct AddInputView: View {
            .padding(.horizontal, 16)
             HStack {
                 Button(action: save) {
-                    Text("保存")
+                    Text(record == nil ? "保存" : "更新")
                         .frame(maxWidth: 100, minHeight: 40)
                         .background(
                             RoundedRectangle(cornerRadius: 20)
@@ -136,28 +146,17 @@ struct AddInputView: View {
         )
         .overlay(alignment: .top) {
             if showWarning {
-                Text("未入力の欄があります")
-                    .padding()
-                    .background(
-                        RoundedRectangle(cornerRadius: 12)
-                            .fill(Color.red.opacity(0.9))
-                    )
-                    .foregroundColor(.white)
-                    .padding(.top, 16) // spacing from top
-                    .transition(.move(edge: .top).combined(with: .opacity))
+                toast(text: "未入力の欄があります", color: .red)
             }
         }
         .overlay(alignment: .top) {
-            if showSuccess {
-                Text("新しい記録が保存されました")
-                    .padding()
-                    .background(
-                        RoundedRectangle(cornerRadius: 12)
-                            .fill(Color.green.opacity(0.9))
-                    )
-                    .foregroundColor(.white)
-                    .padding(.top, 16) // spacing from top
-                    .transition(.move(edge: .top).combined(with: .opacity))
+            if showSuccess && record == nil {
+                toast(
+                    text: record == nil
+                        ? "新しい記録が保存されました"
+                        : "記録を更新しました",
+                    color: .green
+                )
             }
         }
         .animation(.easeInOut, value: showWarning)
@@ -165,6 +164,17 @@ struct AddInputView: View {
             RoundedRectangle(cornerRadius: 20)
                 .fill(Color.rgbo(red: 242, green: 118, blue: 118, opacity: 0.1))
         )
+        .background(
+            RoundedRectangle(cornerRadius: 20)
+                .fill(Color.rgbo(red: 242, green: 118, blue: 118, opacity: 0.1))
+        )
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .principal) {
+                Text("編集")
+                    .foregroundColor(.white)
+            }
+        }
     }
 }
 
@@ -188,9 +198,18 @@ extension AddInputView {
             }
             return
         } else {
-            let timeInt: Int = Int(time) ?? 0
-            modelContext.insert(Record(name: appName, startDate: date, time: timeInt))
-            try? modelContext.save()
+            let timeInt = Int(time) ?? 0
+            if let record {
+                record.name = appName
+                record.startDate = date
+                record.time = timeInt
+
+                dismiss()
+            } else {
+                modelContext.insert(
+                    Record(name: appName, startDate: date, time: timeInt)
+                )
+            }
             appName = ""
             time = ""
             showSuccess = true
@@ -199,6 +218,18 @@ extension AddInputView {
                 showSuccess = false
             }
         }
+    }
+
+    func toast(text: String, color: Color) -> some View {
+        Text(text)
+            .padding()
+            .background(
+                RoundedRectangle(cornerRadius: 12)
+                    .fill(color.opacity(0.9))
+            )
+            .foregroundColor(.white)
+            .padding(.top, 16)
+            .transition(.move(edge: .top).combined(with: .opacity))
     }
 }
 

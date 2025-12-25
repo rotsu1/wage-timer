@@ -17,7 +17,7 @@ struct AddView: View {
                 HeaderView(title: "マイナス時給")
 
                 ScrollView {
-                    AddInputView(records: records)
+                    AddInputView()
                         .padding(.horizontal, 16)
                 }
             }

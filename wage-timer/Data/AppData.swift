@@ -11,13 +11,11 @@ import SwiftData
 class Record {
     var name: String
     var startDate: Date
-    var endDate: Date?
     var time: Int
 
-    init(name: String, startDate: Date, endDate: Date? = nil, time: Int) {
+    init(name: String, startDate: Date, time: Int) {
         self.name = name
         self.startDate = startDate
-        self.endDate = endDate
         self.time = time
     }
 }

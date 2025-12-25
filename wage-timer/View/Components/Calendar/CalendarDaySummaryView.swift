@@ -41,13 +41,14 @@ struct CalendarDaySummaryView: View {
                 Text("損失: \(lossToString(time: todayTime, wage: wage))")
                 Spacer()
             }
-            ForEach(groupRecordsByName(records: filter.today)) { record in
-                card(
-                    title: record.name,
-                    time: timeToString(time: record.totalTime),
-                    occurance: String(record.occurance),
-                    money: lossToString(time: record.totalTime, wage: wage)
-                )
+            ForEach(filter.today) { record in
+                NavigationLink(destination: EditInputView(record: record)) {
+                    card(
+                        title: record.name,
+                        time: timeToString(time: record.time),
+                        money: lossToString(time: record.time, wage: wage)
+                    )
+                }
             }
 
         }
