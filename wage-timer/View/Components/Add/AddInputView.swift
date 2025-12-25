@@ -136,6 +136,16 @@ struct AddInputView: View {
                         )
                 }
                 Spacer()
+                if record != nil {
+                    Button(action: delete) {
+                        Text("削除")
+                            .frame(maxWidth: 100, minHeight: 40)
+                            .background(
+                                RoundedRectangle(cornerRadius: 20)
+                                    .fill(.red)
+                            )
+                    }
+                }
             }
             .padding()
         }
@@ -217,6 +227,13 @@ extension AddInputView {
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
                 showSuccess = false
             }
+        }
+    }
+
+    func delete() -> Void {
+        if let record {
+            modelContext.delete(record)
+            dismiss()
         }
     }
 
