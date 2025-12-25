@@ -90,7 +90,7 @@ struct SummaryView: View {
                 Spacer()
                 VStack {
                     VStack {
-                        Text("前週比 \(getComparison(weeklyRecords, lastMonthlyRecords))")
+                        Text("前週比 \(getComparison(weeklyRecords, lastWeeklyRecords))")
                             .fontWeight(.bold)
                     }
                     .padding(.all, 8)
@@ -103,7 +103,7 @@ struct SummaryView: View {
                             .fill(Color.rgbo(red: 242, green: 118, blue: 118, opacity: 0.3))
                     )
                     VStack {
-                        Text("前月比 \(getComparison(monthlyRecords, lastWeeklyRecords))")
+                        Text("前月比 \(getComparison(monthlyRecords, lastMonthlyRecords))")
                             .fontWeight(.bold)
                     }
                     .padding(.all, 8)
