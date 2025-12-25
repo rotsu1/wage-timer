@@ -43,6 +43,9 @@ struct PeriodModal: View {
                 .ignoresSafeArea()
             VStack {
                 HStack {
+                    Text(" ")
+                    Spacer()
+                    Text("期間設定")
                     Spacer()
                     Button(action: {
                         dismiss() // closes the modal
@@ -99,6 +102,7 @@ struct PeriodModal: View {
                     RoundedRectangle(cornerRadius: 20)
                         .fill(Color.rgbo(red: 242, green: 118, blue: 118, opacity: 0.2))
                 )
+                .padding(.horizontal, 16)
                 
                 let months = (0...12).map { 
                     let display = $0 == 0 ? "指定なし" : "\($0)月"
@@ -120,6 +124,7 @@ struct PeriodModal: View {
                         RoundedRectangle(cornerRadius: 20)
                             .fill(Color.rgbo(red: 242, green: 118, blue: 118, opacity: 0.2))
                     )
+                    .padding(.horizontal, 16)
                 Spacer()
             }
             .foregroundStyle(Color.white)

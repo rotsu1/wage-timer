@@ -32,14 +32,22 @@ struct RecordFilter {
         let end = calendar.date(byAdding: .month, value: 1, to: start).flatMap {
             calendar.date(byAdding: .second, value: -1, to: $0)
         } ?? start
-        return records.filter { $0.startDate >= start && $0.startDate < end }
+        return records.filter { $0.startDate >= start && $0.startDate <= end }
+    }
+
+    var thisYear: [Record] {
+        let start = calendar.dateInterval(of: .year, for: currentDate)?.start ?? currentDate
+        let end = calendar.date(byAdding: .year, value: 1, to: start).flatMap {
+            calendar.date(byAdding: .second, value: -1, to: $0)
+        } ?? start
+        return records.filter { $0.startDate >= start && $0.startDate <= end }
     }
 
     var lastWeek: [Record] {
         let startOfWeek = calendar.dateInterval(of: .weekOfYear, for: currentDate)?.start ?? currentDate
         let start = calendar.date(byAdding: .day, value: -7, to: startOfWeek) ?? startOfWeek
         let end = calendar.date(byAdding: .day, value: -1, to: startOfWeek) ?? startOfWeek
-        return records.filter { $0.startDate >= start && $0.startDate < end }
+        return records.filter { $0.startDate >= start && $0.startDate <= end }
     }
 
     var lastMonth: [Record] {
@@ -47,6 +55,6 @@ struct RecordFilter {
         let lastMonth = calendar.date(byAdding: .second, value: -1, to: startOfMonth) ?? startOfMonth
         let start = calendar.dateInterval(of: .month, for: lastMonth)?.start ?? lastMonth
         let end = calendar.date(byAdding: .second, value: -1, to: startOfMonth) ?? startOfMonth
-        return records.filter { $0.startDate >= start && $0.startDate < end }
+        return records.filter { $0.startDate >= start && $0.startDate <= end }
     }
 }

@@ -24,9 +24,19 @@ func timeToString(time: Int) -> String {
 }
 
 func lossToString(time: Int, wage: Int) -> String {
-    let hours = roundToX(Double(time), point: 2)
-    let loss = hours * Double(wage)
+    let hours = Double(time) / 60.0
+    let rawLoss = hours * Double(wage)
+    let loss = roundToX(rawLoss, point: 2)
+    
     return loss == 0 ? "¥0" : "-¥\(loss)"
+}
+
+func timeWageToDoubleLoss(time: Int, wage: Int) -> Double {
+    let hours = Double(time) / 60.0
+    let rawLoss = hours * Double(wage)
+    let loss = roundToX(rawLoss, point: 2)
+    
+    return loss * -1
 }
 
 func roundToX(_ value: Double, point: Int) -> Double {
@@ -69,4 +79,21 @@ func groupRecordsByDay(records: [Record]) -> [RecordSummary] {
             occurance: records.count
         )
     }
+    .sorted { Int($0.name)! < Int($1.name)! }
+}
+
+func groupRecordsByMonth(records: [Record]) -> [RecordSummary] {
+    let calendar = Calendar.current
+    let grouped = Dictionary(grouping: records, by: { record in
+        calendar.component(.month, from: record.startDate)
+    })
+    
+    return grouped.map { (month, records) in
+        RecordSummary(
+            name: "\(month)",
+            totalTime: records.reduce(0) { $0 + $1.time },
+            occurance: records.count
+        )
+    }
+    .sorted { Int($0.name)! < Int($1.name)! }
 }

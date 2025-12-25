@@ -21,7 +21,7 @@ struct AnalysisView: View {
                 ScrollView {
                     PeriodView()
                         .padding(.horizontal, 16)
-                    GraphView()
+                    GraphView(records: records)
                         .padding(.horizontal, 16)
                     
                     Spacer()
