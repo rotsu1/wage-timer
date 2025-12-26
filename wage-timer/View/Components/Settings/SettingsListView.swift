@@ -14,6 +14,7 @@ struct SettingsListView: View {
     @Query private var languages: [Language]
     @Query private var currencies: [Currency]
     @Query private var wage: [Wage]
+    var records: [Record]
 
     let languageDict = [
         ("英語", "english"),
@@ -69,7 +70,7 @@ struct SettingsListView: View {
                 }
 
                 ZStack {
-                    NavigationLink(destination: NotificationSettingsView()) {
+                    NavigationLink(destination: NotificationSettingsView(records: records)) {
                         EmptyView()
                     }
                     navRow(image: "bell", title: "通知", details: "")
@@ -89,7 +90,7 @@ struct SettingsListView: View {
 
             Section {
                 ZStack {
-                    NavigationLink(destination: NotificationSettingsView()) {
+                    NavigationLink(destination: NotificationSettingsView(records: records)) {
                         EmptyView()
                     }
                     navRow(image: "questionmark", title: "ヘルプ・使い方", details: "")
@@ -172,7 +173,7 @@ func navRow(image: String, title: String, details: String) -> some View {
     }
 }
 
-#Preview {
-    SettingsListView()
-        .modelContainer(for: [Theme.self, Language.self, Currency.self, Wage.self], inMemory: true)
-}
+//#Preview {
+//    SettingsListView()
+//        .modelContainer(for: [Theme.self, Language.self, Currency.self, Wage.self], inMemory: true)
+//}

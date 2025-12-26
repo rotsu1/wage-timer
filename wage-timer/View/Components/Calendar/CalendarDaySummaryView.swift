@@ -42,7 +42,7 @@ struct CalendarDaySummaryView: View {
                 Spacer()
             }
             ForEach(filter.today) { record in
-                NavigationLink(destination: EditInputView(record: record)) {
+                NavigationLink(destination: EditInputView(records: records, record: record)) {
                     card(
                         title: record.name,
                         time: timeToString(time: record.time),

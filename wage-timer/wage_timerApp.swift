@@ -10,23 +10,15 @@ import SwiftData
 
 @main
 struct wage_timerApp: App {
-    @Query private var themes: [Theme]
-    @Environment(\.modelContext) private var modelContext
+    let notificationSettings = NotificationSettings()
 
     var body: some Scene {
         WindowGroup {
             WageAppView()
-                .modelContainer(for: Theme.self)
-                .task {
-                    initTheme()
+                .modelContainer(for: [Theme.self, Language.self, Currency.self, Wage.self, Record.self, Analysis.self])
+                .onAppear {
+                    notificationSettings.requestNotificationRequest()
                 }
         }
-    }
-
-    private func initTheme() {
-        guard themes.isEmpty else { return }
-
-        let theme = Theme(theme: "dark")
-        modelContext.insert(theme)
     }
 }

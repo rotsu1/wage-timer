@@ -11,7 +11,15 @@ struct AddInputView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
     
+    var records: [Record]
     var record: Record?
+    @Query private var wages: [Wage]
+    var wage: Int {
+        if let existingWage = wages.first {
+            return Int(existingWage.wage) ?? 1000
+        }
+        return 1000
+    }
 
     @State private var dateString: String = ""
     @State private var date: Date
@@ -19,7 +27,8 @@ struct AddInputView: View {
     @State private var time: String
     @FocusState private var isFocused: Bool
 
-    init(record: Record? = nil) {
+    init(records: [Record], record: Record? = nil) {
+        self.records = records
         self.record = record
 
         _date = State(initialValue: record?.startDate ?? Date())
@@ -30,6 +39,8 @@ struct AddInputView: View {
     @State private var showWarning: Bool = false
     @State private var showSuccess: Bool = false
 
+    let notification: NotificationSettings = NotificationSettings()
+
     var formatter: DateFormatter {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy/MM/dd"
@@ -37,6 +48,8 @@ struct AddInputView: View {
         formatter.timeZone = TimeZone(secondsFromGMT: 0)
         return formatter
     }
+
+    var filter: RecordFilter { RecordFilter(records: records, currentDate: Date()) }
 
     var body: some View {
         VStack {
@@ -127,7 +140,34 @@ struct AddInputView: View {
             }
            .padding(.horizontal, 16)
             HStack {
-                Button(action: save) {
+                Button {
+                    Task {
+                        save()
+                        // Update notification if pending
+                        let weekly = await notification.isPending("週間レポート")
+                        let monthly = await notification.isPending("月間レポート")
+                        if weekly.isPending {
+                            let totalTime = filter.thisWeek.reduce(0) { $0 + $1.time }
+                            notification.deleteNotification("週間レポート")
+                            notification.scheduleNotifications(
+                                id: "週間レポート",
+                                earnings: timeWageToDoubleLoss(time: totalTime, wage: wage),
+                                time: timeToString(time: totalTime),
+                                components: weekly.components ?? DateComponents()
+                            )
+                        }
+                        if monthly.isPending {
+                            let totalTime = filter.thisMonth.reduce(0) { $0 + $1.time }
+                            notification.deleteNotification("月間レポート")
+                            notification.scheduleNotifications(
+                                id: "月間レポート",
+                                earnings: timeWageToDoubleLoss(time: totalTime, wage: wage),
+                                time: timeToString(time: totalTime),
+                                components: weekly.components ?? DateComponents()
+                            )
+                        }
+                    }
+                } label: {
                     Text(record == nil ? "保存" : "更新")
                         .frame(maxWidth: 100, minHeight: 40)
                         .background(

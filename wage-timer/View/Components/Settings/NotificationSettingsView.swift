@@ -7,63 +7,163 @@
 import SwiftUI
 import SwiftData
 
-struct NotificationSettingsView: View {
-    @Environment(\.modelContext) private var modelContext
-    @Query private var notifications: [NotificationSettings]
+func defaultTime(hour: Int = 20, minute: Int = 0, second: Int = 0) -> Date {
+    var components = Calendar.current.dateComponents([.year, .month, .day], from: Date())
+    components.hour = hour
+    components.minute = minute
+    components.second = second
+    return Calendar.current.date(from: components) ?? Date()
+}
 
-    let dayOfWeek = [
-        ("月曜日", "mon"), 
-        ("火曜日", "tue"), 
-        ("水曜日", "wed"), 
-        ("木曜日", "thu"), 
-        ("金曜日", "fri"), 
-        ("土曜日", "sat"), 
-        ("日曜日", "sun")
+struct NotificationSettingsView: View {
+    var records: [Record]
+    @Query private var wages: [Wage]
+    var wage: Int {
+        if let existingWage = wages.first {
+            return Int(existingWage.wage) ?? 1000
+        }
+        return 1000
+    }
+    let notification = NotificationSettings()
+    @State private var permissionGranted: Bool = false
+    @State private var isWeekly: Bool = false
+    @State private var isMonthly: Bool = false
+    @State private var dayOfWeek: Int = 1
+    @State private var weeklyTime: Date = defaultTime()
+    @State private var monthlyTime: Date = defaultTime()
+    
+    let dayOfWeekArray = [
+        ("日曜日", 1),
+        ("月曜日", 2), 
+        ("火曜日", 3), 
+        ("水曜日", 4), 
+        ("木曜日", 5), 
+        ("金曜日", 6), 
+        ("土曜日", 7)
     ]
+
+    var filter: RecordFilter { RecordFilter(records: records, currentDate: Date()) }
+
+    private func onSettingsChange(_ id: String) -> Void {
+        let calendar = Calendar.current
+        var component = calendar.dateComponents(
+            [.hour, .minute], 
+            from: id == "週間レポート" ? weeklyTime : monthlyTime
+        )
+        if id == "週間レポート" {
+            component.weekday = dayOfWeek
+        }
+        let totalTime = id == "週間レポート" 
+            ? filter.thisWeek.reduce(0) { $0 + $1.time }
+            : filter.thisMonth.reduce(0) { $0 + $1.time }
+        
+        notification.scheduleNotifications(
+            id: "週間レポート",
+            earnings: timeWageToDoubleLoss(time: totalTime, wage: wage),
+            time: timeToString(time: totalTime),
+            components: component
+        )
+    }
 
     var body: some View {
         NavigationStack {
             ZStack {
                 backgroundGradient
                     .ignoresSafeArea()
-                VStack {                  
-                    Form {
-                        Section(
-                            header: Text("レポート"),
-                            footer: Text("過去7日間の収支レポートを毎週決まった日時に通知します。")
-                        ) {
-                            Toggle("週間レポート", isOn: weeklyToggleBinding)
+                VStack {  
+                    if permissionGranted {
+                        Form {
+                            Section(
+                                header: Text("レポート"),
+                                footer: Text("過去7日間の収支レポートを毎週決まった日時に通知します。")
+                            ) {
+                                Toggle("週間レポート", isOn: $isWeekly)
+                                    .onChange(of: isWeekly) { _, newValue in
+                                        Task {
+                                            let isGranted = await notification.isPermitted()
 
-                            pickerRow(image: "", title: "曜日", values: dayOfWeek, bind: dayOfWeekBinding)
+                                            if newValue {
+                                                if isGranted {
+                                                    onSettingsChange("週間レポート")
+                                                } else {
+                                                    notification.requestNotificationRequest()
+                                                    
+                                                    // Re-check permission after request
+                                                    let granted = await notification.isPermitted()
+                                                    if granted {
+                                                        onSettingsChange("週間レポート")
+                                                        permissionGranted = true
+                                                    } else {
+                                                        isWeekly = false
+                                                    }
+                                                }
+                                            } else {
+                                                notification.deleteNotification("週間レポート")
+                                            }
+                                        }
+                                    }
 
-                            DatePicker("時刻", selection: weeklyTimeBinding, displayedComponents: .hourAndMinute)
-                                .environment(\.locale, Locale(identifier: "en_DK"))
-                                .colorScheme(.dark)
+                                if isWeekly {
+                                    pickerRow(image: "", title: "曜日", values: dayOfWeekArray, bind: $dayOfWeek)
+                                        .onChange(of: dayOfWeek) {
+                                            onSettingsChange("週間レポート")
+                                        }
+
+                                    DatePicker("時刻", selection: $weeklyTime, displayedComponents: .hourAndMinute)
+                                        .environment(\.locale, Locale(identifier: "en_DK"))
+                                        .colorScheme(.dark)
+                                        .onChange(of: weeklyTime) {
+                                            onSettingsChange("週間レポート")
+                                        }
+                                }
+                            }
+                            .listRowBackground(Color.rgbo(red: 64, green: 64, blue: 64, opacity: 1))
+                            
+                            Section(
+                                footer: Text("一ヶ月の収支レポートを月末の指定した時刻に通知します。")
+                            ) {
+                                Toggle("月間レポート", isOn: $isMonthly)
+                                    .onChange(of: isMonthly) { _, newValue in
+                                        Task {
+                                            let isGranted = await notification.isPermitted()
+
+                                            if newValue {
+                                                if isGranted {
+                                                    onSettingsChange("月間レポート")
+                                                } else {
+                                                    notification.requestNotificationRequest()
+                                                    
+                                                    // Re-check permission after request
+                                                    let granted = await notification.isPermitted()
+                                                    if granted {
+                                                        onSettingsChange("月間レポート")
+                                                        permissionGranted = true
+                                                    } else {
+                                                        isMonthly = false
+                                                    }
+                                                }
+                                            } else {
+                                                notification.deleteNotification("月間レポート")
+                                            }
+                                        }
+                                    }
+
+                                if isMonthly {
+                                    DatePicker("時刻", selection: $monthlyTime, displayedComponents: .hourAndMinute)
+                                        .environment(\.locale, Locale(identifier: "en_DK"))
+                                        .colorScheme(.dark)
+                                        .onChange(of: monthlyTime) {
+                                            onSettingsChange("月間レポート")
+                                        }
+                                } 
+                            }
+                            .listRowBackground(Color.rgbo(red: 64, green: 64, blue: 64, opacity: 1))
                         }
-                        .listRowBackground(Color.rgbo(red: 64, green: 64, blue: 64, opacity: 1))
-                        
-                        Section(
-                            footer: Text("一ヶ月の収支レポートを月末の指定した時刻に通知します。")
-                        ) {
-                            Toggle("月間レポート", isOn: monthlyToggleBinding)
-
-                            DatePicker("時刻", selection: monthlyTimeBinding, displayedComponents: .hourAndMinute)
-                                .environment(\.locale, Locale(identifier: "en_DK"))
-                                .colorScheme(.dark)     
-                        }
-                        .listRowBackground(Color.rgbo(red: 64, green: 64, blue: 64, opacity: 1))
-
-                        Section(
-                            header: Text("アラート"),
-                            footer: Text("今日のアプリの使用時間が設定した時間を上回ると通知します。")
-                        ) {
-                            DatePicker("使用時間", selection: alertBinding, displayedComponents: .hourAndMinute)
-                                .environment(\.locale, Locale(identifier: "en_DK"))
-                                .colorScheme(.dark)
-                        }
-                        .listRowBackground(Color.rgbo(red: 64, green: 64, blue: 64, opacity: 1))
+                        .scrollContentBackground(.hidden)
+                    } else {
+                        Text("通知がオフになっています。設定 > [アプリ名] > 通知 から許可設定をお願いします。")
+                        .padding()
                     }
-                    .scrollContentBackground(.hidden)
 
                     Spacer()
                 }
@@ -78,117 +178,30 @@ struct NotificationSettingsView: View {
                     .foregroundColor(.white)
             }
         }
-    }
-}
+        .onAppear {
+            Task {
+                let weeklyData = await notification.isPending("週間レポート")
+                let monthlyData = await notification.isPending("月間レポート")
+                
+                isWeekly = weeklyData.isPending
+                isMonthly = monthlyData.isPending
+                dayOfWeek = weeklyData.components?.weekday ?? dayOfWeek
 
-extension NotificationSettingsView {
-    var weeklyToggleBinding: Binding<Bool> {
-        let notification = notifications.first
-
-        return Binding(
-            get: { notification?.weekly ?? true },
-            set: { newValue in
-                if let existingWeekly = notification {
-                    existingWeekly.weekly = newValue
-                } else {
-                    addNotification()
+                let calendar = Calendar.current
+                if let existingWeekly = weeklyData.components {
+                    weeklyTime = calendar.date(from: existingWeekly) ?? weeklyTime
+                }
+                if let existingMonthly = monthlyData.components {
+                    monthlyTime = calendar.date(from: existingMonthly) ?? monthlyTime
                 }
             }
-        )
-    }
-    var dayOfWeekBinding: Binding<String> {
-        let notification = notifications.first
-
-        return Binding(
-            get: { notification?.dayOfWeek ?? "sun" },
-            set: { newValue in
-                if let existingDayOfWeek = notification {
-                    existingDayOfWeek.dayOfWeek = newValue
-                } else {
-                    addNotification()
-                }
-            }
-        )
-    }
-    var weeklyTimeBinding: Binding<Date> {
-        let notification = notifications.first
-
-        return Binding(
-            get: { 
-                notification?.weeklyTime ?? 
-                Calendar.current.date(from: DateComponents(hour: 20, minute: 0))! 
-            },
-            set: { newValue in
-                if let existingWeeklyTime = notification {
-                    existingWeeklyTime.weeklyTime = newValue
-                } else {
-                    addNotification()
-                }
-            }
-        )
-    }
-    var monthlyToggleBinding: Binding<Bool> {
-        let notification = notifications.first
-
-        return Binding(
-            get: { notification?.monthly ?? true },
-            set: { newValue in
-                if let existingMonthly = notification {
-                    existingMonthly.monthly = newValue
-                } else {
-                    addNotification()
-                }
-            }
-        )
-    }
-    var monthlyTimeBinding: Binding<Date> {
-        let notification = notifications.first
-
-        return Binding(
-            get: { 
-                notification?.monthlyTime ?? 
-                Calendar.current.date(from: DateComponents(hour: 20, minute: 0))! 
-            },
-            set: { newValue in
-                if let existingMonthlyTime = notification {
-                    existingMonthlyTime.monthlyTime = newValue
-                } else {
-                    addNotification()
-                }
-            }
-        )
-    }
-    var alertBinding: Binding<Date> {
-        let notification = notifications.first
-
-        return Binding(
-            get: { 
-                notification?.alert ?? Calendar.current.date(from: DateComponents(hour: 1, minute: 0))! 
-            },
-            set: { newValue in
-                if let existingAlert = notification {
-                    existingAlert.alert = newValue
-                } else {
-                    addNotification()
-                }
-            }
-        )
-    }
-
-    func addNotification() {
-        modelContext.insert(
-            NotificationSettings(
-                weekly: true, 
-                dayOfWeek: "sun", 
-                weeklyTime: Calendar.current.date(from: DateComponents(hour: 20, minute: 0))! ,
-                monthly: true,
-                monthlyTime: Calendar.current.date(from: DateComponents(hour: 20, minute: 0))!,
-                alert: Calendar.current.date(from: DateComponents(hour: 2, minute: 0))! 
-            )
-        )
+        }
+        .task {
+            permissionGranted = await notification.isPermitted()
+        }
     }
 }
 
 #Preview {
-    NotificationSettingsView()
+    NotificationSettingsView(records: [])
 }

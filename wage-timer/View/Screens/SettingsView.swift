@@ -9,6 +9,8 @@ import SwiftUI
 import SwiftData
 
 struct SettingsView: View {
+    var records: [Record]
+    
     var body: some View {
         ZStack {
             backgroundGradient
@@ -16,13 +18,13 @@ struct SettingsView: View {
             VStack {
                 HeaderView(title: "設定")
                 
-                SettingsListView()
+                SettingsListView(records: records)
             }
         }
     }
 }
 
-#Preview {
-    SettingsView()
-        .modelContainer(for: [Theme.self, Language.self, Currency.self, Wage.self], inMemory: true)
-}
+//#Preview {
+//    SettingsView()
+//        .modelContainer(for: [Theme.self, Language.self, Currency.self, Wage.self], inMemory: true)
+//}

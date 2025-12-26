@@ -27,7 +27,7 @@ struct WageAppView: View {
                     AnalysisView(records: records)
                 }
                 Tab("Settings", systemImage: "gearshape") {
-                    SettingsView()
+                    SettingsView(records: records)
                 }
             }
         }
@@ -36,5 +36,5 @@ struct WageAppView: View {
 
 #Preview {
     WageAppView()
-        .modelContainer(for: [Theme.self, Language.self, Currency.self, Wage.self, NotificationSettings.self, Record.self, Analysis.self], inMemory: true)
+        .modelContainer(for: [Theme.self, Language.self, Currency.self, Wage.self, Record.self, Analysis.self], inMemory: true)
 }

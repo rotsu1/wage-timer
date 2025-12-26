@@ -54,29 +54,3 @@ class Analysis {
         self.month = month
     }
 }
-
-@Model
-class NotificationSettings {
-    var weekly: Bool
-    var dayOfWeek: String
-    var weeklyTime: Date
-    var monthly: Bool
-    var monthlyTime: Date
-    var alert: Date
-
-    init(
-        weekly: Bool, 
-        dayOfWeek: String, 
-        weeklyTime: Date,
-        monthly: Bool,
-        monthlyTime: Date,
-        alert: Date
-    ) {
-        self.weekly = weekly
-        self.dayOfWeek = dayOfWeek
-        self.weeklyTime = weeklyTime
-        self.monthly = monthly
-        self.monthlyTime = monthlyTime
-        self.alert = alert
-    }
-}

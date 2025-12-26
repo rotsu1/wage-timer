@@ -8,6 +8,7 @@ import SwiftUI
 import SwiftData
 
 struct EditInputView: View {
+    var records: [Record]
     var record: Record
 
     var body: some View {
@@ -16,7 +17,7 @@ struct EditInputView: View {
                 .ignoresSafeArea()
             VStack {
                 ScrollView {                
-                    AddInputView(record: record)
+                    AddInputView(records: records, record: record)
                         .padding()
                     
                     Spacer()
