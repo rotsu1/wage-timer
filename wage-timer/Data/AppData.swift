@@ -19,3 +19,14 @@ class Record {
         self.time = time
     }
 }
+
+@Model
+class PendingRecord {
+    var name: String
+    var startDate: Date
+
+    init(name: String, startDate: Date) {
+        self.name = name
+        self.startDate = startDate
+    }
+}
