@@ -81,9 +81,6 @@ func groupRecordsByDay(records: [Record]) -> [RecordSummary] {
         calendar.startOfDay(for: record.startDate)
     })
     
-    let formatter = DateFormatter()
-    formatter.dateFormat = "yyyy/MM/dd"
-    
     return grouped.map { (date, records) in
         RecordSummary(
             name: dayFormatter.string(from: date),
