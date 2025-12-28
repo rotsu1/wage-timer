@@ -18,7 +18,7 @@ struct HomeView: View {
                 .ignoresSafeArea()
 
             VStack {
-                HeaderView(title: "マイナス時給")
+                HeaderView(title: "Home")
                 
                 ScrollView {
                     SummaryView(

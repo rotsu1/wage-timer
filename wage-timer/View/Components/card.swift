@@ -8,9 +8,13 @@
 import SwiftUI
 
 func card(title: String, time: String, occurance: String? = nil, money: String) -> some View {
-    let description = occurance != nil 
-        ? "総使用時間: \(time) 使用回数: \(occurance ?? "0")"
-        : "使用時間: \(time)"
+    let description: String
+    
+    if let occurance = occurance {
+        description = String(localized: "Total Time: \(time) Count: \(occurance)")
+    } else {
+        description = String(localized: "Time: \(time)")
+    }
     return(
         HStack {
             VStack(alignment: .leading) {

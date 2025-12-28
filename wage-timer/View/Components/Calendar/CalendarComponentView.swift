@@ -62,7 +62,7 @@ struct CalendarComponentView: View {
 
     let formatter: DateFormatter = {
         let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy年MM月"
+        formatter.dateFormat = "yyyy/MM"
         return formatter
     }()
      

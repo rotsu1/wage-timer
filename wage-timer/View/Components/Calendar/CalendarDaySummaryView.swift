@@ -31,7 +31,7 @@ struct CalendarDaySummaryView: View {
 
     let formatter: DateFormatter = {
         let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy年MM月dd日"
+        formatter.dateFormat = "yyyy/MM/dd"
         return formatter
     }()
 
@@ -45,7 +45,7 @@ struct CalendarDaySummaryView: View {
             }
             HStack {
                 let todayTime = filter.today.reduce(0) { $0 + $1.time }
-                Text("損失: \(lossToString(time: todayTime, wage: wage, currency: currency))")
+                Text("Loss: \(lossToString(time: todayTime, wage: wage, currency: currency))")
                 Spacer()
             }
             ForEach(filter.today) { record in

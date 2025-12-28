@@ -77,7 +77,7 @@ class NotificationSettings {
 
         let content = UNMutableNotificationContent()
         content.title = id
-        content.body = "収支: \(earnings)\n無駄にした時間: \(time)"
+        content.body = "Loss: \(earnings)\n Wasted Time: \(time)"
         content.sound = .default
 
         let trigger = UNCalendarNotificationTrigger(

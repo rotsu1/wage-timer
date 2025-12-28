@@ -36,5 +36,5 @@ struct WageAppView: View {
 
 #Preview {
     WageAppView()
-        .modelContainer(for: [Theme.self, Language.self, Currency.self, Wage.self, Record.self, Analysis.self], inMemory: true)
+        .modelContainer(for: [Theme.self, Currency.self, Wage.self, Record.self, Analysis.self], inMemory: true)
 }

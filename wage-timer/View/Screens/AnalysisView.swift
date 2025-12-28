@@ -17,7 +17,7 @@ struct AnalysisView: View {
                 .ignoresSafeArea()
 
             VStack {
-                HeaderView(title: "分析")
+                HeaderView(title: "Analysis")
                 
                 ScrollView {
                     PeriodView()

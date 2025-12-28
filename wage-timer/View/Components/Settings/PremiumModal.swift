@@ -12,7 +12,7 @@ struct PremiumModal: View {
             HStack {
                 Text(" ")
                 Spacer()
-                Text("プレミアム")
+                Text("Premium")
                 Spacer()
                 Text(" ")
             }
@@ -24,7 +24,7 @@ struct PremiumModal: View {
                     .frame(width: 70, height: 70)
                     .aspectRatio(contentMode: .fit)
                     .padding(.vertical, 16)
-                Text("今後追加していきます")
+                Text("We will add more features in the future")
                     .fontWeight(.bold)
                     .font(.title)
                     .padding(.bottom, 8)

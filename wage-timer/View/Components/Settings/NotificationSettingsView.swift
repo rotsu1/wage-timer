@@ -33,13 +33,13 @@ struct NotificationSettingsView: View {
     @State private var monthlyTime: Date = defaultTime()
     
     let dayOfWeekArray = [
-        ("日曜日", 1),
-        ("月曜日", 2), 
-        ("火曜日", 3), 
-        ("水曜日", 4), 
-        ("木曜日", 5), 
-        ("金曜日", 6), 
-        ("土曜日", 7)
+        (String(localized: "Sunday"), 1),
+        (String(localized: "Monday"), 2), 
+        (String(localized: "Tuesday"), 3), 
+        (String(localized: "Wednesday"), 4), 
+        (String(localized: "Thursday"), 5), 
+        (String(localized: "Friday"), 6), 
+        (String(localized: "Saturday"), 7)
     ]
 
     var filter: RecordFilter { RecordFilter(records: records, currentDate: Date()) }
@@ -48,17 +48,17 @@ struct NotificationSettingsView: View {
         let calendar = Calendar.current
         var component = calendar.dateComponents(
             [.hour, .minute], 
-            from: id == "週間レポート" ? weeklyTime : monthlyTime
+            from: id == "Weekly Report" ? weeklyTime : monthlyTime
         )
-        if id == "週間レポート" {
+        if id == "Weekly Report" {
             component.weekday = dayOfWeek
         }
-        let totalTime = id == "週間レポート" 
+        let totalTime = id == "Weekly Report" 
             ? filter.thisWeek.reduce(0) { $0 + $1.time }
             : filter.thisMonth.reduce(0) { $0 + $1.time }
         
         notification.scheduleNotifications(
-            id: "週間レポート",
+            id: "Weekly Report",
             earnings: timeWageToDoubleLoss(time: totalTime, wage: wage),
             time: timeToString(time: totalTime),
             components: component
@@ -74,86 +74,86 @@ struct NotificationSettingsView: View {
                 if permissionGranted {
                     Form {
                         Section(
-                            header: Text("レポート"),
-                            footer: Text("過去7日間の収支レポートを毎週決まった日時に通知します。")
+                            header: Text("Report"),
+                            footer: Text("We will send a weekly notification of the past 7 days’ profit and loss report at a fixed time.")
                         ) {
-                            Toggle("週間レポート", isOn: $isWeekly)
+                            Toggle("Weekly Report", isOn: $isWeekly)
                                 .onChange(of: isWeekly) { _, newValue in
                                     Task {
                                         let isGranted = await notification.isPermitted()
 
                                         if newValue {
                                             if isGranted {
-                                                onSettingsChange("週間レポート")
+                                                onSettingsChange("Weekly Report")
                                             } else {
                                                 notification.requestNotificationRequest()
                                                 
                                                 // Re-check permission after request
                                                 let granted = await notification.isPermitted()
                                                 if granted {
-                                                    onSettingsChange("週間レポート")
+                                                    onSettingsChange("Weekly Report")
                                                     permissionGranted = true
                                                 } else {
                                                     isWeekly = false
                                                 }
                                             }
                                         } else {
-                                            notification.deleteNotification("週間レポート")
+                                            notification.deleteNotification("Weekly Report")
                                         }
                                     }
                                 }
 
                             if isWeekly {
-                                pickerRow(image: "", title: "曜日", values: dayOfWeekArray, bind: $dayOfWeek)
+                                pickerRow(image: "", title: "Day of Week", values: dayOfWeekArray, bind: $dayOfWeek)
                                     .onChange(of: dayOfWeek) {
-                                        onSettingsChange("週間レポート")
+                                        onSettingsChange("Weekly Report")
                                     }
 
-                                DatePicker("時刻", selection: $weeklyTime, displayedComponents: .hourAndMinute)
+                                DatePicker(String(localized: "Time"), selection: $weeklyTime, displayedComponents: .hourAndMinute)
                                     .environment(\.locale, Locale(identifier: "en_DK"))
                                     .colorScheme(.dark)
                                     .onChange(of: weeklyTime) {
-                                        onSettingsChange("週間レポート")
+                                        onSettingsChange("Weekly Report")
                                     }
                             }
                         }
                         .listRowBackground(Color.rgbo(red: 64, green: 64, blue: 64, opacity: 1))
                         
                         Section(
-                            footer: Text("一ヶ月の収支レポートを月末の指定した時刻に通知します。")
+                            footer: Text("We will send a monthly notification of your profit and loss report at a specified time on the last day of the month.")
                         ) {
-                            Toggle("月間レポート", isOn: $isMonthly)
+                            Toggle("Monthly Report", isOn: $isMonthly)
                                 .onChange(of: isMonthly) { _, newValue in
                                     Task {
                                         let isGranted = await notification.isPermitted()
 
                                         if newValue {
                                             if isGranted {
-                                                onSettingsChange("月間レポート")
+                                                onSettingsChange("Monthly Report")
                                             } else {
                                                 notification.requestNotificationRequest()
                                                 
                                                 // Re-check permission after request
                                                 let granted = await notification.isPermitted()
                                                 if granted {
-                                                    onSettingsChange("月間レポート")
+                                                    onSettingsChange("Monthly Report")
                                                     permissionGranted = true
                                                 } else {
                                                     isMonthly = false
                                                 }
                                             }
                                         } else {
-                                            notification.deleteNotification("月間レポート")
+                                            notification.deleteNotification("Monthly Report")
                                         }
                                     }
                                 }
 
                             if isMonthly {
-                                DatePicker("時刻", selection: $monthlyTime, displayedComponents: .hourAndMinute)
+                                DatePicker(String(localized: "Time"), selection: $monthlyTime, displayedComponents: .hourAndMinute)
                                     .environment(\.locale, Locale(identifier: "en_DK"))
                                     .colorScheme(.dark)
                                     .onChange(of: monthlyTime) {
-                                        onSettingsChange("月間レポート")
+                                        onSettingsChange("Monthly Report")
                                     }
                             } 
                         }
@@ -161,7 +161,7 @@ struct NotificationSettingsView: View {
                     }
                     .scrollContentBackground(.hidden)
                 } else {
-                    Text("通知がオフになっています。設定 > [アプリ名] > 通知 から許可設定をお願いします。")
+                    Text("Notifications are turned off. Please enable them in Settings > Wage Timer > Notifications.")
                     .padding()
                 }
 
@@ -173,14 +173,14 @@ struct NotificationSettingsView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .principal) {
-                Text("通知")
+                Text("Notifications")
                     .foregroundColor(.white)
             }
         }
         .onAppear {
             Task {
-                let weeklyData = await notification.isPending("週間レポート")
-                let monthlyData = await notification.isPending("月間レポート")
+                let weeklyData = await notification.isPending("Weekly Report")
+                let monthlyData = await notification.isPending("Monthly Report")
                 
                 isWeekly = weeklyData.isPending
                 isMonthly = monthlyData.isPending

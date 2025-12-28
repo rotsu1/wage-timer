@@ -32,7 +32,7 @@ struct PeriodView: View {
             showModal = true
         } label: {
             HStack {
-                Text("期間")
+                Text("Period")
                 Spacer()
                 if let analyis = analysisDates.first {
                     period(analyis)

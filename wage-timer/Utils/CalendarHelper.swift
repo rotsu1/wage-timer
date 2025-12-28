@@ -37,7 +37,15 @@ struct CalendarHelper {
         return Array(range)
     }
 
-    let weekdays = ["日", "月", "火", "水", "木", "金", "土"]
+    let weekdays = [
+        String(localized: "Sun"), 
+        String(localized: "Mon"), 
+        String(localized: "Tue"), 
+        String(localized: "Wed"), 
+        String(localized: "Thu"), 
+        String(localized: "Fri"), 
+        String(localized: "Sat")
+    ]
 
     let columns = Array(repeating: GridItem(.flexible()), count: 7)
 }

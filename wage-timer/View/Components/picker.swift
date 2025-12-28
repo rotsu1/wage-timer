@@ -8,7 +8,7 @@ import SwiftUI
 
 func pickerRow<T: Hashable>(
     image: String, 
-    title: String, 
+    title: LocalizedStringKey, 
     values: [(key: String, value: T)], 
     bind: Binding<T>,
     color: Color = Color.rgbo(red: 179, green: 179, blue: 179, opacity: 1)

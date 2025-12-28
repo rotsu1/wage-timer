@@ -27,7 +27,7 @@ struct TodaysAppsView: View {
     var body: some View {
         VStack() {
             HStack {
-                Text("今日使ったアプリ")
+                Text("Today's Used Apps")
                     .font(.headline)
                     .fontWeight(.bold)
                 Spacer()

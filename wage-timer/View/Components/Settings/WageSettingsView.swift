@@ -29,7 +29,7 @@ struct WageSettingsView: View {
             VStack {                  
                 VStack {
                     HStack {
-                        Text("時給")
+                        Text("Wage")
                         Spacer()
                     }
                     HStack {
@@ -59,13 +59,13 @@ struct WageSettingsView: View {
                             .fill(Color.rgbo(red: 242, green: 118, blue: 118, opacity: 0.2))
                     )
 
-                    Text("時間を有効活用できた時の時給を設定してみよう！")
+                    Text("Let’s set an hourly rate for when you use your time effectively")
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .font(.caption)
-                    Text("例1: 現在のバイトの時給")
+                    Text("Example 1: Your current part-time job hourly wage")
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .font(.caption)
-                    Text("例2: 勉強に時間を投じたら将来的に時給3000円になる")
+                    Text("Example 2: If you invest time in studying, your future hourly rate could be ¥3,000.")
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .font(.caption)
 
@@ -81,7 +81,7 @@ struct WageSettingsView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .principal) {
-                Text("時給設定")
+                Text("Wage Settings")
                     .foregroundColor(.white)
             }
         }

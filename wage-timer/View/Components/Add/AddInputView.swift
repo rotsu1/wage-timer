@@ -54,7 +54,7 @@ struct AddInputView: View {
     var body: some View {
         VStack {
             HStack {
-                Text(record == nil ? "新規" : "編集")
+                Text(record == nil ? LocalizedStringKey("New") : LocalizedStringKey("Edit"))
                     .font(.headline)
                     .fontWeight(.bold)
                 Spacer()
@@ -62,7 +62,7 @@ struct AddInputView: View {
             .padding()
             VStack {
                 HStack {
-                    Text("日付")
+                    Text("Date")
                     Spacer()
                 }
                 HStack {
@@ -106,10 +106,10 @@ struct AddInputView: View {
             .padding(.horizontal, 16)
             VStack {
                 HStack {
-                    Text("アプリ名")
+                    Text("App Name")
                     Spacer()
                 }
-                TextField("例: インスタ", text: $appName)
+                TextField("Example: Instagram", text: $appName)
                     .padding()
                     .overlay(
                         RoundedRectangle(cornerRadius: 20)
@@ -123,10 +123,10 @@ struct AddInputView: View {
             .padding(.horizontal, 16)
             VStack {
                 HStack {
-                    Text("使用時間（分）")
+                    Text("Used time (minutes)")
                     Spacer()
                 }
-                TextField("例: 120", text: $time)
+                TextField("Example: 120", text: $time)
                     .keyboardType(.numberPad)
                     .padding()
                     .overlay(
@@ -144,13 +144,13 @@ struct AddInputView: View {
                     Task {
                         save()
                         // Update notification if pending
-                        let weekly = await notification.isPending("週間レポート")
-                        let monthly = await notification.isPending("月間レポート")
+                        let weekly = await notification.isPending("Weekly Report")
+                        let monthly = await notification.isPending("Monthly Report")
                         if weekly.isPending {
                             let totalTime = filter.thisWeek.reduce(0) { $0 + $1.time }
-                            notification.deleteNotification("週間レポート")
+                            notification.deleteNotification("Weekly Report")
                             notification.scheduleNotifications(
-                                id: "週間レポート",
+                                id: "Weekly Report",
                                 earnings: timeWageToDoubleLoss(time: totalTime, wage: wage),
                                 time: timeToString(time: totalTime),
                                 components: weekly.components ?? DateComponents()
@@ -158,9 +158,9 @@ struct AddInputView: View {
                         }
                         if monthly.isPending {
                             let totalTime = filter.thisMonth.reduce(0) { $0 + $1.time }
-                            notification.deleteNotification("月間レポート")
+                            notification.deleteNotification("Monthly Report")
                             notification.scheduleNotifications(
-                                id: "月間レポート",
+                                id: "Monthly Report",
                                 earnings: timeWageToDoubleLoss(time: totalTime, wage: wage),
                                 time: timeToString(time: totalTime),
                                 components: weekly.components ?? DateComponents()
@@ -168,7 +168,7 @@ struct AddInputView: View {
                         }
                     }
                 } label: {
-                    Text(record == nil ? "保存" : "更新")
+                    Text("save")
                         .frame(maxWidth: 100, minHeight: 40)
                         .background(
                             RoundedRectangle(cornerRadius: 20)
@@ -178,7 +178,7 @@ struct AddInputView: View {
                 Spacer()
                 if record != nil {
                     Button(action: delete) {
-                        Text("削除")
+                        Text("Delete")
                             .frame(maxWidth: 100, minHeight: 40)
                             .background(
                                 RoundedRectangle(cornerRadius: 20)
@@ -196,15 +196,15 @@ struct AddInputView: View {
         )
         .overlay(alignment: .top) {
             if showWarning {
-                toast(text: "未入力の欄があります", color: .red)
+                toast(text: "There are empty fields.", color: .red)
             }
         }
         .overlay(alignment: .top) {
             if showSuccess && record == nil {
                 toast(
                     text: record == nil
-                        ? "新しい記録が保存されました"
-                        : "記録を更新しました",
+                        ? "New record saved"
+                        : "Record updated",
                     color: .green
                 )
             }
@@ -221,7 +221,7 @@ struct AddInputView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .principal) {
-                Text("編集")
+                Text("Edit")
                     .foregroundColor(.white)
             }
         }

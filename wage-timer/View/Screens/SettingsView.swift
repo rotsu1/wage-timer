@@ -17,7 +17,7 @@ struct SettingsView: View {
                 .ignoresSafeArea()
 
             VStack {
-                HeaderView(title: "設定")
+                HeaderView(title: "Settings")
                 
                 SettingsListView(records: records)
             }

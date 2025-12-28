@@ -12,7 +12,6 @@ enum DataContainer {
     nonisolated static let shared: ModelContainer = {
         try! ModelContainer(
             for: Theme.self, 
-                 Language.self, 
                  Currency.self, 
                  Wage.self, 
                  Record.self, 

@@ -91,14 +91,14 @@ struct GraphView: View {
         let data: [ValuePerCategory] = (1...12).map { month in
             if let existingSummary = groupedByMonth.first(where: { Int($0.name) == month }) {
                 return ValuePerCategory(
-                    category: "\(existingSummary.name)月",
+                    category: "\(existingSummary.name)",
                     value: timeWageToDoubleLoss(
                         time: existingSummary.totalTime,
                         wage: wage
                     )
                 )
             } else {
-                return ValuePerCategory(category: "\(month)月", value: 0)
+                return ValuePerCategory(category: "\(month)", value: 0)
             }
         }
         return data
@@ -118,14 +118,14 @@ struct GraphView: View {
         let data: [ValuePerCategory] = range.map { day in
             if let existingSummary = groupedByDay.first(where: { Int($0.name) == day }) {
                 return ValuePerCategory(
-                    category: "\(existingSummary.name)日",
+                    category: "\(existingSummary.name)",
                     value: timeWageToDoubleLoss(
                         time: existingSummary.totalTime,
                         wage: wage
                     )
                 )
             } else {
-                return ValuePerCategory(category: "\(day)日", value: 0)
+                return ValuePerCategory(category: "\(day)", value: 0)
             }
         }
         return data
@@ -134,7 +134,7 @@ struct GraphView: View {
     var body: some View {
         VStack {
             HStack {
-                Text("収支")
+                Text("P&L")
                 Spacer()
             }
             HStack {

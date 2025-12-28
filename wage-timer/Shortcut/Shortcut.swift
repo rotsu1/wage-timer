@@ -8,13 +8,13 @@ import AppIntents
 import SwiftData
 
 struct StartRecordIntent: AppIntent {
-    static var title: LocalizedStringResource = "記録を開始する"
+    static var title: LocalizedStringResource = "Start recording"
 
-    @Parameter(title: "記録名")
+    @Parameter(title: "Name of App")
     var name: String
 
     static var parameterSummary: some ParameterSummary {
-        Summary("\(\.$name) の記録を開始する")
+        Summary("Start recording \(\.$name)")
     }
 
     func perform() async throws -> some IntentResult {
@@ -34,17 +34,16 @@ struct StartRecordIntent: AppIntent {
 
 
 struct StopRecordIntent: AppIntent {
-    static var title: LocalizedStringResource = "記録を終了する"
+    static var title: LocalizedStringResource = "Stop recording"
 
-    @Parameter(title: "記録名")
+    @Parameter(title: "Name of App")
     var name: String
 
     static var parameterSummary: some ParameterSummary {
-        Summary("\(\.$name) の記録を終了する")
+        Summary("Stop recording \(\.$name)")
     }
 
     func perform() async throws -> some IntentResult {
-        // MainActor.run を削除
         let context = ModelContext(DataContainer.shared)
 
         let descriptor = FetchDescriptor<PendingRecord>(
@@ -86,7 +85,6 @@ struct MyAppShortcuts: AppShortcutsProvider {
             phrases: [
                 "Start record in \(.applicationName)",
                 "Begin tracking in \(.applicationName)",
-                "\(.applicationName)で記録開始"
             ],
             shortTitle: "Start Record",
             systemImageName: "play.circle"
@@ -97,7 +95,6 @@ struct MyAppShortcuts: AppShortcutsProvider {
             phrases: [
                 "Stop record in \(.applicationName)",
                 "End tracking in \(.applicationName)",
-                "\(.applicationName)で記録終了"
             ],
             shortTitle: "Stop Record",
             systemImageName: "stop.circle"

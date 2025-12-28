@@ -45,7 +45,7 @@ struct PeriodModal: View {
                 HStack {
                     Text(" ")
                     Spacer()
-                    Text("期間設定")
+                    Text("Period Settings")
                     Spacer()
                     Button(action: {
                         dismiss() // closes the modal
@@ -57,11 +57,11 @@ struct PeriodModal: View {
                 }
                 .padding()
                 HStack {
-                    Text("年:")
+                    Text("Year:")
 
                     Spacer()
 
-                    TextField("例: 2025", text: $yearString)
+                    TextField("Example: 2025", text: $yearString)
                         .focused($isFocused)
                         .onAppear {
                             if let existingAnalysisDates = analysisDates.first {
@@ -104,12 +104,12 @@ struct PeriodModal: View {
                 .padding(.horizontal, 16)
                 
                 let months = (0...12).map { 
-                    let display = $0 == 0 ? "指定なし" : "\($0)月"
+                    let display = $0 == 0 ? String(localized: "Not specified") : "\($0)"
                     return (key: display, value: $0) 
                 }
                 pickerRow(
                     image: "", 
-                    title: "月", 
+                    title: "Month", 
                     values: months, 
                     bind: monthBinding,
                     color: .white)

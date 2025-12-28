@@ -11,7 +11,6 @@ import SwiftData
 struct SettingsListView: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var themes: [Theme]
-    @Query private var languages: [Language]
     @Query private var currencies: [Currency]
     var currency: String {
         if let existingCurrency = currencies.first {
@@ -24,20 +23,16 @@ struct SettingsListView: View {
 
     @State private var showModal = false
 
-    let languageDict = [
-        ("英語", "english"),
-        ("日本語", "japanese")
-    ]
     let currecyDict = [
-        ("日本円", "¥"),
-        ("米ドル", "$"),
-        ("ユーロ", "€"),
-        ("英国ポンド", "£"),
+        (String(localized: "JPY"), "¥"),
+        (String(localized: "USD"), "$"),
+        (String(localized: "EUR"), "€"),
+        (String(localized: "GBP"), "£"),
     ]
     let themeDict = [
-        ("自動", "system"),
-        ("ライト", "light"),
-        ("ダーク", "dark")
+        (String(localized: "System"), "system"),
+        (String(localized: "Light"), "light"),
+        (String(localized: "Dark"), "dark")
     ]
 
     var body: some View {
@@ -50,7 +45,7 @@ struct SettingsListView: View {
                         Spacer()
                         Image(systemName: "trophy.fill")
                             .foregroundStyle(Color.rgbo(red: 235, green: 235, blue: 48, opacity: 1))
-                        Text("プレミアム")
+                        Text("Premium")
                             .foregroundStyle(.white)
                         Spacer()
                     }
@@ -80,7 +75,7 @@ struct SettingsListView: View {
                     }
                     navRow(
                         image: "yensign.arrow.trianglehead.counterclockwise.rotate.90", 
-                        title: "時給", 
+                        title: "Hourly Wage", 
                         details: "\(currency)\(wageDisplay(wage: wage))"
                     )                
                 }
@@ -89,17 +84,15 @@ struct SettingsListView: View {
                     NavigationLink(destination: NotificationSettingsView(records: records)) {
                         EmptyView()
                     }
-                    navRow(image: "bell", title: "通知", details: "")
+                    navRow(image: "bell", title: "Notifications", details: "")
                 }
                 
-                pickerRow(image: "yensign", title: "通貨", values: currecyDict, bind: currencyBinding)
+                pickerRow(image: "yensign", title: "Currency", values: currecyDict, bind: currencyBinding)
 
-                pickerRow(image: "globe", title: "言語", values: languageDict, bind: languageBinding)
-
-                pickerRow(image: "circle.righthalf.filled", title: "外観モード", values: themeDict, bind: themeBinding)
+                pickerRow(image: "circle.righthalf.filled", title: "Appearance", values: themeDict, bind: themeBinding)
 
             } header: {
-                Text("アプリ")
+                Text("Apps")
                 .foregroundStyle(.white)
             }
             .listRowBackground(Color.rgbo(red: 64, green: 64, blue: 64, opacity: 1))
@@ -109,7 +102,7 @@ struct SettingsListView: View {
                     NavigationLink(destination: NotificationSettingsView(records: records)) {
                         EmptyView()
                     }
-                    navRow(image: "questionmark", title: "ヘルプ・使い方", details: "")
+                    navRow(image: "questionmark", title: "Help & Usage", details: "")
                 }
             }
             .listRowBackground(Color.rgbo(red: 64, green: 64, blue: 64, opacity: 1))
@@ -129,20 +122,6 @@ extension SettingsListView {
                     existingTheme.theme = newValue
                 } else {
                     modelContext.insert(Theme(theme: newValue))
-                }
-            }
-        )
-    }
-    var languageBinding: Binding<String> {
-        let language = languages.first
-
-        return Binding(
-            get: { language?.language ?? "japanese" },
-            set: { newValue in
-                if let existingLanguage = language {
-                    existingLanguage.language = newValue
-                } else {
-                    modelContext.insert(Language(language: newValue))
                 }
             }
         )
@@ -172,7 +151,7 @@ extension SettingsListView {
     }
 }
 
-func navRow(image: String, title: String, details: String) -> some View {
+func navRow(image: String, title: LocalizedStringKey, details: String) -> some View {
     HStack {
         HStack {
             Image(systemName: image)

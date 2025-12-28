@@ -18,15 +18,6 @@ class Theme {
 }
 
 @Model
-class Language {
-    var language: String
-
-    init(language: String) {
-        self.language = language
-    }
-}
-
-@Model
 class Currency {
     var currency: String
 

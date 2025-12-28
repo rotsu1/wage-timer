@@ -20,7 +20,7 @@ struct CalendarView: View {
                 }
                 
             VStack {
-                HeaderView(title: "カレンダー")
+                HeaderView(title: "Calendar")
 
                 ScrollView {                
                     CalendarComponentView(currentDate: $date, records: records)

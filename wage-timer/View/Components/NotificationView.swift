@@ -24,11 +24,11 @@ struct NotificationView: View {
                             .frame(width: 70, height: 70)
                             .aspectRatio(contentMode: .fit)
                             .padding(.vertical, 16)
-                        Text("最近の通知はありません")
+                        Text("No recent activities")
                             .fontWeight(.bold)
                             .font(.title)
                             .padding(.bottom, 8)
-                        Text("新しいアクティビティがある場合に通知します")
+                        Text("We will notify you when there is an activity")
                     }
                 } else {
                     ForEach(notifications.prefix(50), id: \.self) { notification in
@@ -44,7 +44,7 @@ struct NotificationView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .principal) {
-                Text("通知")
+                Text("Notifications")
                     .foregroundColor(.white)
             }
         }

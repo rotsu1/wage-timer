@@ -15,7 +15,7 @@ struct AddView: View {
                 .ignoresSafeArea()
 
             VStack {
-                HeaderView(title: "マイナス時給")
+                HeaderView(title: "Add")
 
                 AddInputView(records: records)
                     .padding(.horizontal, 16)

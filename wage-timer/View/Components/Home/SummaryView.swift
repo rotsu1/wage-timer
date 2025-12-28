@@ -7,7 +7,7 @@
 import SwiftUI
 import SwiftData
 
-private func homeCard(title: String, main: String, description: String) -> some View {
+private func homeCard(title: LocalizedStringKey, main: String, description: String) -> some View {
     VStack(alignment: .leading) {
         Text(title)
         Spacer()
@@ -60,7 +60,7 @@ struct SummaryView: View {
         let groupedByName = groupRecordsByName(records: monthlyRecords)
         let mostUsed = groupedByName.max { $0.totalTime < $1.totalTime }
         let mostUsedDescription = mostUsed.map { timeToString(time: $0.totalTime) }
-        return (mostUsed?.name ?? "なし", mostUsedDescription ?? "なし")
+        return (mostUsed?.name ?? String(localized: "None"), mostUsedDescription ?? String(localized: "None"))
     }
 
     private func getAverage(_ records: [Record]) -> (use: String, time: String) {
@@ -79,7 +79,7 @@ struct SummaryView: View {
         let pastTotal = past.reduce(0) { $0 + $1.time }
         
         guard pastTotal != 0 else {
-            return "なし"
+            return String(localized: "None")
         }
         
         let change = Double(pastTotal - currentTotal) / Double(pastTotal) * 100
@@ -90,7 +90,7 @@ struct SummaryView: View {
         VStack {
             HStack {
                 VStack(alignment: .leading) {
-                    Text("今日のマイナス")
+                    Text("Today's Loss")
                     Text(lossToString(time: totalTime(records: todayRecords), wage: wage, currency: currency))
                         .font(.largeTitle)
                         .fontWeight(.heavy)
@@ -98,7 +98,7 @@ struct SummaryView: View {
                 Spacer()
                 VStack {
                     VStack {
-                        Text("前週比 \(getComparison(weeklyRecords, lastWeeklyRecords))")
+                        Text("WoW \(getComparison(weeklyRecords, lastWeeklyRecords))")
                             .fontWeight(.bold)
                     }
                     .padding(.all, 8)
@@ -111,7 +111,7 @@ struct SummaryView: View {
                             .fill(Color.rgbo(red: 242, green: 118, blue: 118, opacity: 0.3))
                     )
                     VStack {
-                        Text("前月比 \(getComparison(monthlyRecords, lastMonthlyRecords))")
+                        Text("MoM \(getComparison(monthlyRecords, lastMonthlyRecords))")
                             .fontWeight(.bold)
                     }
                     .padding(.all, 8)
@@ -130,12 +130,12 @@ struct SummaryView: View {
                 let weekyTime = totalTime(records: weeklyRecords)
                 let monthlyTime = totalTime(records: monthlyRecords)
                 homeCard(
-                    title: "今週", 
+                    title: "This Week", 
                     main: lossToString(time: weekyTime, wage: wage, currency: currency), 
                     description: timeToString(time: weekyTime)
                 )
                 homeCard(
-                    title: "今月", 
+                    title: "This Month", 
                     main: lossToString(time: monthlyTime, wage: wage, currency: currency),
                     description: timeToString(time: monthlyTime)
                 )
@@ -143,14 +143,14 @@ struct SummaryView: View {
             HStack {
                 let mostUsed = getMostUsed(monthlyRecords)
                 homeCard(
-                    title: "今月一番使ったアプリ",
+                    title: "Most Used App (This Month)",
                     main: mostUsed.name,
                     description: mostUsed.description
                 )
 
                 let average = getAverage(monthlyRecords)
                 homeCard(
-                    title: "今月の開いた回数の平均",
+                    title: "Avg. Open Count (This Month)",
                     main: average.use,
                     description: average.time
                 )

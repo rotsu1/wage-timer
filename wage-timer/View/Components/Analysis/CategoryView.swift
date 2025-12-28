@@ -11,13 +11,13 @@ struct CategoryView: View {
     var body: some View {
         VStack {
             HStack {
-                Text("カテゴリ別")
+                Text("Category")
                     .font(.headline)
                     .fontWeight(.bold)
                 Spacer()
             }
             HStack {
-                Text("2025年")
+                Text("2025")
                     .font(.headline)
                     .fontWeight(.bold)
                 Spacer()
