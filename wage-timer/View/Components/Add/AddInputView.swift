@@ -41,13 +41,13 @@ struct AddInputView: View {
 
     let notification: NotificationSettings = NotificationSettings()
 
-    var formatter: DateFormatter {
+    private static let formatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy/MM/dd"
-        formatter.locale = Locale(identifier: "en_US_POSIX") // ensures consistent parsing
+        formatter.locale = Locale(identifier: "en_US_POSIX")
         formatter.timeZone = TimeZone(secondsFromGMT: 0)
         return formatter
-    }
+    }()
 
     var filter: RecordFilter { RecordFilter(records: records, currentDate: Date()) }
 
