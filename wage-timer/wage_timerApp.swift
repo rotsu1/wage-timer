@@ -9,7 +9,7 @@ import SwiftUI
 import SwiftData
 
 enum DataContainer {
-    static let shared: ModelContainer = {
+    nonisolated static let shared: ModelContainer = {
         try! ModelContainer(
             for: Theme.self, 
                  Language.self, 

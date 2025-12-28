@@ -15,14 +15,16 @@ struct EditInputView: View {
         ZStack {
             backgroundGradient
                 .ignoresSafeArea()
-            VStack {
-                ScrollView {                
-                    AddInputView(records: records, record: record)
-                        .padding()
-                    
-                    Spacer()
-                }
+
+            VStack {     
+                AddInputView(records: records, record: record)
+                    .padding()
+                
+                Spacer()
             }
+        }
+        .onTapGesture {
+            hideKeyboard()
         }
     }
 }

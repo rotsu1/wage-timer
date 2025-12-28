@@ -8,6 +8,12 @@ import SwiftUI
 import SwiftData
 import Foundation
 
+extension View {
+    func hideKeyboard() {
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+    }
+}
+
 func timeToString(time: Int) -> String {
     let days = time / 1440
     let hours = time % 1440 / 60
@@ -63,6 +69,12 @@ func groupRecordsByName(records: [Record]) -> [RecordSummary] {
     }
 }
 
+private let dayFormatter: DateFormatter = {
+    let formatter = DateFormatter()
+    formatter.dateFormat = "yyyy/MM/dd"
+    return formatter
+}()
+
 func groupRecordsByDay(records: [Record]) -> [RecordSummary] {
     let calendar = Calendar.current
     let grouped = Dictionary(grouping: records, by: { record in
@@ -74,7 +86,7 @@ func groupRecordsByDay(records: [Record]) -> [RecordSummary] {
     
     return grouped.map { (date, records) in
         RecordSummary(
-            name: formatter.string(from: date),
+            name: dayFormatter.string(from: date),
             totalTime: records.reduce(0) { $0 + $1.time },
             occurance: records.count
         )

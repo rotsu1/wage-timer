@@ -30,17 +30,17 @@ struct GraphView: View {
         return calendar.component(.year, from: today)
     }
 
-    private var currentContext: (year: Int, month: Int?) {
+    private var currentContext: (year: Int, month: Int) {
         if let existingAnalysis = analysisData.first {
             return (existingAnalysis.year, existingAnalysis.month)
         }
-        return (todayYear, nil)
+        return (todayYear, 0)
     }
 
     private var chartData: [ValuePerCategory] {
         let (year, month) = currentContext
         
-        if let month = month {
+        if month != 0 {
             return getMonthData(year: year, month: month)
         } else {
             return getYearData(year: year)
@@ -52,7 +52,7 @@ struct GraphView: View {
         let filter = getFilter(year: year, month: month)
         
         let totalTime: Int
-        if month != nil {
+        if month != 0 {
              totalTime = filter.thisMonth.reduce(0) { $0 + $1.time }
         } else {
              totalTime = filter.thisYear.reduce(0) { $0 + $1.time }

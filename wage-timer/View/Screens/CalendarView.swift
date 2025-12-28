@@ -15,6 +15,10 @@ struct CalendarView: View {
         ZStack {
             backgroundGradient
                 .ignoresSafeArea()
+                .onTapGesture {
+                    hideKeyboard()
+                }
+                
             VStack {
                 HeaderView(title: "カレンダー")
 

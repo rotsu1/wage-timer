@@ -15,6 +15,7 @@ struct AnalysisView: View {
         ZStack {
             backgroundGradient
                 .ignoresSafeArea()
+
             VStack {
                 HeaderView(title: "分析")
                 

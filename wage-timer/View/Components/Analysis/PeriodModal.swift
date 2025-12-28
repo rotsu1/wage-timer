@@ -40,6 +40,7 @@ struct PeriodModal: View {
         ZStack {
             backgroundGradient
                 .ignoresSafeArea()
+            
             VStack {
                 HStack {
                     Text(" ")
@@ -82,7 +83,7 @@ struct PeriodModal: View {
                                 if let existingAnalysisDates = analysisDates.first {
                                     existingAnalysisDates.year = Int(yearString) ?? todayYear
                                 } else {
-                                    modelContext.insert(Analysis(year: todayYear))
+                                    modelContext.insert(Analysis(year: todayYear, month: 0))
                                 }
                             }
                         }
@@ -126,6 +127,9 @@ struct PeriodModal: View {
                 Spacer()
             }
             .foregroundStyle(Color.white)
+        }
+        .onTapGesture {
+            hideKeyboard()
         }
     }
 }

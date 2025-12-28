@@ -47,9 +47,9 @@ class Wage {
 @Model
 class Analysis {
     var year: Int
-    var month: Int?
+    var month: Int
 
-    init(year: Int, month: Int? = nil) {
+    init(year: Int, month: Int) {
         self.year = year
         self.month = month
     }

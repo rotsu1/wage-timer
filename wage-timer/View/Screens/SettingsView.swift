@@ -15,6 +15,7 @@ struct SettingsView: View {
         ZStack {
             backgroundGradient
                 .ignoresSafeArea()
+
             VStack {
                 HeaderView(title: "設定")
                 

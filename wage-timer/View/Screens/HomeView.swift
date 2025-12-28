@@ -16,6 +16,7 @@ struct HomeView: View {
         ZStack {
             backgroundGradient
                 .ignoresSafeArea()
+
             VStack {
                 HeaderView(title: "マイナス時給")
                 

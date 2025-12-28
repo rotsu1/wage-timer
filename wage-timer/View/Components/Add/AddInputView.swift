@@ -110,16 +110,15 @@ struct AddInputView: View {
                     Spacer()
                 }
                 TextField("例: インスタ", text: $appName)
-                .keyboardType(.numberPad)
-                .padding()
-                .overlay(
-                    RoundedRectangle(cornerRadius: 20)
-                        .stroke(Color.rgbo(red: 242, green: 118, blue: 118, opacity: 0.3))
-                )
-                .background(
-                    RoundedRectangle(cornerRadius: 20)
-                        .fill(Color.rgbo(red: 242, green: 118, blue: 118, opacity: 0.2))
-                )
+                    .padding()
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 20)
+                            .stroke(Color.rgbo(red: 242, green: 118, blue: 118, opacity: 0.3))
+                    )
+                    .background(
+                        RoundedRectangle(cornerRadius: 20)
+                            .fill(Color.rgbo(red: 242, green: 118, blue: 118, opacity: 0.2))
+                    )
             }
             .padding(.horizontal, 16)
             VStack {
@@ -128,15 +127,16 @@ struct AddInputView: View {
                     Spacer()
                 }
                 TextField("例: 120", text: $time)
-                .padding()
-                .overlay(
-                    RoundedRectangle(cornerRadius: 20)
-                        .stroke(Color.rgbo(red: 242, green: 118, blue: 118, opacity: 0.3))
-                )
-                .background(
-                    RoundedRectangle(cornerRadius: 20)
-                        .fill(Color.rgbo(red: 242, green: 118, blue: 118, opacity: 0.2))
-                )
+                    .keyboardType(.numberPad)
+                    .padding()
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 20)
+                            .stroke(Color.rgbo(red: 242, green: 118, blue: 118, opacity: 0.3))
+                    )
+                    .background(
+                        RoundedRectangle(cornerRadius: 20)
+                            .fill(Color.rgbo(red: 242, green: 118, blue: 118, opacity: 0.2))
+                    )
             }
            .padding(.horizontal, 16)
             HStack {

@@ -13,14 +13,18 @@ struct AddView: View {
         ZStack {
             backgroundGradient
                 .ignoresSafeArea()
+
             VStack {
                 HeaderView(title: "マイナス時給")
 
-                ScrollView {
-                    AddInputView(records: records)
-                        .padding(.horizontal, 16)
-                }
+                AddInputView(records: records)
+                    .padding(.horizontal, 16)
+                
+                Spacer()
             }
+        }
+        .onTapGesture {
+            hideKeyboard()
         }
     }
 }

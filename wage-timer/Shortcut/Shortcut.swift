@@ -18,17 +18,15 @@ struct StartRecordIntent: AppIntent {
     }
 
     func perform() async throws -> some IntentResult {
-        await MainActor.run {
-            let context = ModelContext(DataContainer.shared)
+        let context = ModelContext(DataContainer.shared)
 
-            let pending = PendingRecord(
-                name: name,
-                startDate: Date()
-            )
+        let pending = PendingRecord(
+            name: name,
+            startDate: Date()
+        )
 
-            context.insert(pending)
-            try? context.save()
-        }
+        context.insert(pending)
+        try? context.save()
 
         return .result()
     }
@@ -46,31 +44,30 @@ struct StopRecordIntent: AppIntent {
     }
 
     func perform() async throws -> some IntentResult {
-        await MainActor.run {
-            let context = ModelContext(DataContainer.shared)
+        // MainActor.run を削除
+        let context = ModelContext(DataContainer.shared)
 
-            let descriptor = FetchDescriptor<PendingRecord>(
-                predicate: #Predicate { $0.name == name },
-                sortBy: [SortDescriptor(\.startDate, order: .reverse)]
-            )
+        let descriptor = FetchDescriptor<PendingRecord>(
+            predicate: #Predicate { $0.name == name },
+            sortBy: [SortDescriptor(\.startDate, order: .reverse)]
+        )
 
-            guard let pending = try? context.fetch(descriptor).first else {
-                return
-            }
-
-            let seconds = Date().timeIntervalSince(pending.startDate)
-            let minutes = max(1, Int(seconds / 60))
-
-            let record = Record(
-                name: pending.name,
-                startDate: pending.startDate,
-                time: minutes
-            )
-
-            context.insert(record)
-            context.delete(pending)
-            try? context.save()
+        guard let pending = try? context.fetch(descriptor).first else {
+            return .result()
         }
+
+        let seconds = Date().timeIntervalSince(pending.startDate)
+        let minutes = max(1, Int(seconds / 60))
+
+        let record = Record(
+            name: pending.name,
+            startDate: pending.startDate,
+            time: minutes
+        )
+
+        context.insert(record)
+        context.delete(pending)
+        try? context.save()
 
         return .result()
     }

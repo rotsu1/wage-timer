@@ -66,110 +66,109 @@ struct NotificationSettingsView: View {
     }
 
     var body: some View {
-        NavigationStack {
-            ZStack {
-                backgroundGradient
-                    .ignoresSafeArea()
-                VStack {  
-                    if permissionGranted {
-                        Form {
-                            Section(
-                                header: Text("レポート"),
-                                footer: Text("過去7日間の収支レポートを毎週決まった日時に通知します。")
-                            ) {
-                                Toggle("週間レポート", isOn: $isWeekly)
-                                    .onChange(of: isWeekly) { _, newValue in
-                                        Task {
-                                            let isGranted = await notification.isPermitted()
+        ZStack {
+            backgroundGradient
+                .ignoresSafeArea()
+            
+            VStack {  
+                if permissionGranted {
+                    Form {
+                        Section(
+                            header: Text("レポート"),
+                            footer: Text("過去7日間の収支レポートを毎週決まった日時に通知します。")
+                        ) {
+                            Toggle("週間レポート", isOn: $isWeekly)
+                                .onChange(of: isWeekly) { _, newValue in
+                                    Task {
+                                        let isGranted = await notification.isPermitted()
 
-                                            if newValue {
-                                                if isGranted {
+                                        if newValue {
+                                            if isGranted {
+                                                onSettingsChange("週間レポート")
+                                            } else {
+                                                notification.requestNotificationRequest()
+                                                
+                                                // Re-check permission after request
+                                                let granted = await notification.isPermitted()
+                                                if granted {
                                                     onSettingsChange("週間レポート")
+                                                    permissionGranted = true
                                                 } else {
-                                                    notification.requestNotificationRequest()
-                                                    
-                                                    // Re-check permission after request
-                                                    let granted = await notification.isPermitted()
-                                                    if granted {
-                                                        onSettingsChange("週間レポート")
-                                                        permissionGranted = true
-                                                    } else {
-                                                        isWeekly = false
-                                                    }
+                                                    isWeekly = false
                                                 }
-                                            } else {
-                                                notification.deleteNotification("週間レポート")
                                             }
+                                        } else {
+                                            notification.deleteNotification("週間レポート")
                                         }
                                     }
-
-                                if isWeekly {
-                                    pickerRow(image: "", title: "曜日", values: dayOfWeekArray, bind: $dayOfWeek)
-                                        .onChange(of: dayOfWeek) {
-                                            onSettingsChange("週間レポート")
-                                        }
-
-                                    DatePicker("時刻", selection: $weeklyTime, displayedComponents: .hourAndMinute)
-                                        .environment(\.locale, Locale(identifier: "en_DK"))
-                                        .colorScheme(.dark)
-                                        .onChange(of: weeklyTime) {
-                                            onSettingsChange("週間レポート")
-                                        }
                                 }
-                            }
-                            .listRowBackground(Color.rgbo(red: 64, green: 64, blue: 64, opacity: 1))
-                            
-                            Section(
-                                footer: Text("一ヶ月の収支レポートを月末の指定した時刻に通知します。")
-                            ) {
-                                Toggle("月間レポート", isOn: $isMonthly)
-                                    .onChange(of: isMonthly) { _, newValue in
-                                        Task {
-                                            let isGranted = await notification.isPermitted()
 
-                                            if newValue {
-                                                if isGranted {
-                                                    onSettingsChange("月間レポート")
-                                                } else {
-                                                    notification.requestNotificationRequest()
-                                                    
-                                                    // Re-check permission after request
-                                                    let granted = await notification.isPermitted()
-                                                    if granted {
-                                                        onSettingsChange("月間レポート")
-                                                        permissionGranted = true
-                                                    } else {
-                                                        isMonthly = false
-                                                    }
-                                                }
-                                            } else {
-                                                notification.deleteNotification("月間レポート")
-                                            }
-                                        }
+                            if isWeekly {
+                                pickerRow(image: "", title: "曜日", values: dayOfWeekArray, bind: $dayOfWeek)
+                                    .onChange(of: dayOfWeek) {
+                                        onSettingsChange("週間レポート")
                                     }
 
-                                if isMonthly {
-                                    DatePicker("時刻", selection: $monthlyTime, displayedComponents: .hourAndMinute)
-                                        .environment(\.locale, Locale(identifier: "en_DK"))
-                                        .colorScheme(.dark)
-                                        .onChange(of: monthlyTime) {
-                                            onSettingsChange("月間レポート")
-                                        }
-                                } 
+                                DatePicker("時刻", selection: $weeklyTime, displayedComponents: .hourAndMinute)
+                                    .environment(\.locale, Locale(identifier: "en_DK"))
+                                    .colorScheme(.dark)
+                                    .onChange(of: weeklyTime) {
+                                        onSettingsChange("週間レポート")
+                                    }
                             }
-                            .listRowBackground(Color.rgbo(red: 64, green: 64, blue: 64, opacity: 1))
                         }
-                        .scrollContentBackground(.hidden)
-                    } else {
-                        Text("通知がオフになっています。設定 > [アプリ名] > 通知 から許可設定をお願いします。")
-                        .padding()
-                    }
+                        .listRowBackground(Color.rgbo(red: 64, green: 64, blue: 64, opacity: 1))
+                        
+                        Section(
+                            footer: Text("一ヶ月の収支レポートを月末の指定した時刻に通知します。")
+                        ) {
+                            Toggle("月間レポート", isOn: $isMonthly)
+                                .onChange(of: isMonthly) { _, newValue in
+                                    Task {
+                                        let isGranted = await notification.isPermitted()
 
-                    Spacer()
+                                        if newValue {
+                                            if isGranted {
+                                                onSettingsChange("月間レポート")
+                                            } else {
+                                                notification.requestNotificationRequest()
+                                                
+                                                // Re-check permission after request
+                                                let granted = await notification.isPermitted()
+                                                if granted {
+                                                    onSettingsChange("月間レポート")
+                                                    permissionGranted = true
+                                                } else {
+                                                    isMonthly = false
+                                                }
+                                            }
+                                        } else {
+                                            notification.deleteNotification("月間レポート")
+                                        }
+                                    }
+                                }
+
+                            if isMonthly {
+                                DatePicker("時刻", selection: $monthlyTime, displayedComponents: .hourAndMinute)
+                                    .environment(\.locale, Locale(identifier: "en_DK"))
+                                    .colorScheme(.dark)
+                                    .onChange(of: monthlyTime) {
+                                        onSettingsChange("月間レポート")
+                                    }
+                            } 
+                        }
+                        .listRowBackground(Color.rgbo(red: 64, green: 64, blue: 64, opacity: 1))
+                    }
+                    .scrollContentBackground(.hidden)
+                } else {
+                    Text("通知がオフになっています。設定 > [アプリ名] > 通知 から許可設定をお願いします。")
+                    .padding()
                 }
-                .foregroundStyle(.white)
-                .padding(.horizontal, 16)
+
+                Spacer()
             }
+            .foregroundStyle(.white)
+            .padding(.horizontal, 16)
         }
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {

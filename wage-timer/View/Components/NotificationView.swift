@@ -16,6 +16,7 @@ struct NotificationView: View {
             ZStack {
                 backgroundGradient
                     .ignoresSafeArea()
+
                 VStack {                  
                     if notifications.isEmpty {
                         VStack {

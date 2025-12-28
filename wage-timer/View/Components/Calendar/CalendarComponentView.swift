@@ -12,10 +12,30 @@ let numberOfCells = 6 * 7
 struct CalendarComponentView: View {
     @Binding var currentDate: Date
     var records: [Record]
-
-    var filter: RecordFilter { RecordFilter(records: records, currentDate: currentDate) }
+    @Query private var wages: [Wage]
+    var wage: Int {
+        if let existingWage = wages.first {
+            return Int(existingWage.wage) ?? 1000
+        }
+        return 1000
+    }
 
     var calendarHelper: CalendarHelper { CalendarHelper(currentDate: currentDate) }
+
+    var dailySummaries: [Int: Int] {
+        let filter = RecordFilter(records: records, currentDate: currentDate)
+        let monthlyRecords = filter.thisMonth
+        
+        let calendar = Calendar.current
+        var summaries: [Int: Int] = [:]
+        
+        for record in monthlyRecords {
+            let day = calendar.component(.day, from: record.startDate)
+            summaries[day, default: 0] += record.time
+        }
+        
+        return summaries
+    }
 
     func changeMonth(_ value: Int) -> Void {
         let calendar = Calendar.current
@@ -67,40 +87,50 @@ struct CalendarComponentView: View {
                 }
             }
             LazyVGrid(columns: calendarHelper.columns) {
+                let firstWeekday = calendarHelper.firstWeekday
+                let daysCount = calendarHelper.numberOfDays.count
+
+                let summaries = dailySummaries
+                let calendar = Calendar.current
+                let currentDayComponent = calendar.component(.day, from: currentDate)
+
                 ForEach(1...numberOfCells, id: \.self) { day in
-                    let acutualDay = day - calendarHelper.firstWeekday + 1
-                    if day < calendarHelper.firstWeekday {
+                    let acutualDay = day - firstWeekday + 1
+                    
+                    if day < firstWeekday || day > daysCount + firstWeekday - 1 {
                         Text("")
-                    } else if day > calendarHelper.numberOfDays.count + calendarHelper.firstWeekday - 1 {
-                        Text("")
+                            .frame(maxWidth: .infinity, minHeight: 60)
                     } else {
                         Button {
                             changeDay(acutualDay)
                         } label: {
-                            let calendar = Calendar.current
-                            if acutualDay == calendar.component(.day, from: currentDate) {
-                                VStack {
-                                    Spacer()
-                                    Text("\(acutualDay)")
-                                    Spacer()
-                                    Text("")
-                                    Spacer()
-                                }
-                                .frame(maxWidth: .infinity, minHeight: 60)
-                                .background(
-                                    RoundedRectangle(cornerRadius: 10)
-                                        .fill(Color.rgbo(red: 242, green: 118, blue: 118, opacity: 0.2))
+                            let totalTime = summaries[acutualDay] ?? 0
+                            let isSelected = (acutualDay == currentDayComponent)
+                            let loss = lossToString(
+                                            time: totalTime, 
+                                            wage: wage
+                                        )
+                            
+                            VStack {
+                                Spacer()
+                                Text("\(acutualDay)")
+                                Spacer()
+                                Text(
+                                    loss == "¥0" ? "" : loss
                                 )
-                            } else {
-                                VStack {
-                                    Spacer()
-                                    Text("\(acutualDay)")
-                                    Spacer()
-                                    Text("")
-                                    Spacer()
-                                }
-                                .frame(maxWidth: .infinity, minHeight: 60)
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.5)
+                                Spacer()
                             }
+                            .frame(maxWidth: .infinity, minHeight: 60)
+                            .background(
+                                RoundedRectangle(cornerRadius: 10)
+                                    .fill(
+                                        isSelected 
+                                        ? Color.rgbo(red: 242, green: 118, blue: 118, opacity: 0.2) 
+                                        : Color.clear
+                                    )
+                            )
                         }
                     }
                 }

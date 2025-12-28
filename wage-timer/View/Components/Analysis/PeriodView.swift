@@ -15,7 +15,7 @@ struct PeriodView: View {
 
     func period(_ analysisDate: Analysis) -> some View {
         let year = analysisDate.year
-        let month = analysisDate.month ?? 0
+        let month = analysisDate.month
 
         let period = month == 0 ? "\(String(year))" : "\(String(year))/\(month)"
         return Text(period)
