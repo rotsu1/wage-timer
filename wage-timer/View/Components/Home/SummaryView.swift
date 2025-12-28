@@ -38,6 +38,14 @@ struct SummaryView: View {
         }
         return 1000
     }
+    @Query private var currencies: [Currency]
+    var currency: String {
+        if let existingCurrency = currencies.first {
+            return existingCurrency.currency
+        }
+        return "¥"
+    }
+
     var todayRecords: [Record]
     var weeklyRecords: [Record]
     var monthlyRecords: [Record]
@@ -63,7 +71,7 @@ struct SummaryView: View {
             : 0
         let totalTime = records.reduce(0) { $0 + $1.time }
         let averageTime = totalDays > 0 ? totalTime / totalDays : 0
-        return (averageUse == 0.0 ? "0" : String(averageUse), lossToString(time: averageTime, wage: wage))
+        return (averageUse == 0.0 ? "0" : String(averageUse), lossToString(time: averageTime, wage: wage, currency: currency))
     }
 
     private func getComparison(_ current: [Record], _ past: [Record]) -> String {
@@ -83,7 +91,7 @@ struct SummaryView: View {
             HStack {
                 VStack(alignment: .leading) {
                     Text("今日のマイナス")
-                    Text(lossToString(time: totalTime(records: todayRecords), wage: wage))
+                    Text(lossToString(time: totalTime(records: todayRecords), wage: wage, currency: currency))
                         .font(.largeTitle)
                         .fontWeight(.heavy)
                 }
@@ -123,12 +131,12 @@ struct SummaryView: View {
                 let monthlyTime = totalTime(records: monthlyRecords)
                 homeCard(
                     title: "今週", 
-                    main: lossToString(time: weekyTime, wage: wage), 
+                    main: lossToString(time: weekyTime, wage: wage, currency: currency), 
                     description: timeToString(time: weekyTime)
                 )
                 homeCard(
                     title: "今月", 
-                    main: lossToString(time: monthlyTime, wage: wage),
+                    main: lossToString(time: monthlyTime, wage: wage, currency: currency),
                     description: timeToString(time: monthlyTime)
                 )
             }

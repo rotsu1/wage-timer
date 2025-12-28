@@ -19,6 +19,13 @@ struct CalendarComponentView: View {
         }
         return 1000
     }
+    @Query private var currencies: [Currency]
+    var currency: String {
+        if let existingCurrency = currencies.first {
+            return existingCurrency.currency
+        }
+        return "¥"
+    }
 
     var calendarHelper: CalendarHelper { CalendarHelper(currentDate: currentDate) }
 
@@ -108,7 +115,8 @@ struct CalendarComponentView: View {
                             let isSelected = (acutualDay == currentDayComponent)
                             let loss = lossToString(
                                             time: totalTime, 
-                                            wage: wage
+                                            wage: wage,
+                                            currency: currency
                                         )
                             
                             VStack {
@@ -116,7 +124,7 @@ struct CalendarComponentView: View {
                                 Text("\(acutualDay)")
                                 Spacer()
                                 Text(
-                                    loss == "¥0" ? "" : loss
+                                    loss == "\(currency)0" ? "" : loss
                                 )
                                 .lineLimit(1)
                                 .minimumScaleFactor(0.5)

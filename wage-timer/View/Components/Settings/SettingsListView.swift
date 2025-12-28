@@ -13,6 +13,12 @@ struct SettingsListView: View {
     @Query private var themes: [Theme]
     @Query private var languages: [Language]
     @Query private var currencies: [Currency]
+    var currency: String {
+        if let existingCurrency = currencies.first {
+            return existingCurrency.currency
+        }
+        return "¥"
+    }
     @Query private var wage: [Wage]
     var records: [Record]
 
@@ -23,13 +29,10 @@ struct SettingsListView: View {
         ("日本語", "japanese")
     ]
     let currecyDict = [
-        ("日本円", "jpy"),
-        ("米ドル", "usd"),
-        ("ユーロ", "eur"),
-        ("英国ポンド", "gbp"),
-        ("オーストラリアドル", "aud"),
-        ("カナダドル", "cad"),
-        ("スイスフラン", "chf")
+        ("日本円", "¥"),
+        ("米ドル", "$"),
+        ("ユーロ", "€"),
+        ("英国ポンド", "£"),
     ]
     let themeDict = [
         ("自動", "system"),
@@ -75,7 +78,11 @@ struct SettingsListView: View {
                     NavigationLink(destination: WageSettingsView()) {
                         EmptyView()
                     }
-                    navRow(image: "yensign.arrow.trianglehead.counterclockwise.rotate.90", title: "時給", details: "¥\(wageDisplay(wage: wage))")                
+                    navRow(
+                        image: "yensign.arrow.trianglehead.counterclockwise.rotate.90", 
+                        title: "時給", 
+                        details: "\(currency)\(wageDisplay(wage: wage))"
+                    )                
                 }
 
                 ZStack {
@@ -144,7 +151,7 @@ extension SettingsListView {
         let currency = currencies.first
 
         return Binding(
-            get: { currency?.currency ?? "jpy" },
+            get: { currency?.currency ?? "¥" },
             set: { newValue in
                 if let existingCurrency = currency {
                     existingCurrency.currency = newValue

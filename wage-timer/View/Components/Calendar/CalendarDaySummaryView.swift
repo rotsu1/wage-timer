@@ -16,6 +16,13 @@ struct CalendarDaySummaryView: View {
         }
         return 1000
     }
+    @Query private var currencies: [Currency]
+    var currency: String {
+        if let existingCurrency = currencies.first {
+            return existingCurrency.currency
+        }
+        return "¥"
+    }
 
     @Binding var currentDate: Date
     var records: [Record]
@@ -38,7 +45,7 @@ struct CalendarDaySummaryView: View {
             }
             HStack {
                 let todayTime = filter.today.reduce(0) { $0 + $1.time }
-                Text("損失: \(lossToString(time: todayTime, wage: wage))")
+                Text("損失: \(lossToString(time: todayTime, wage: wage, currency: currency))")
                 Spacer()
             }
             ForEach(filter.today) { record in
@@ -46,7 +53,7 @@ struct CalendarDaySummaryView: View {
                     card(
                         title: record.name,
                         time: timeToString(time: record.time),
-                        money: lossToString(time: record.time, wage: wage)
+                        money: lossToString(time: record.time, wage: wage, currency: currency)
                     )
                 }
             }

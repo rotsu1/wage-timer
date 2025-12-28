@@ -29,12 +29,12 @@ func timeToString(time: Int) -> String {
     return result.isEmpty ? "0m" : result
 }
 
-func lossToString(time: Int, wage: Int) -> String {
+func lossToString(time: Int, wage: Int, currency: String) -> String {
     let hours = Double(time) / 60.0
     let rawLoss = hours * Double(wage)
     let loss = roundToX(rawLoss, point: 2)
     
-    return loss == 0 ? "¥0" : "-¥\(loss)"
+    return loss == 0 ? "\(currency)0" : "-\(currency)\(loss)"
 }
 
 func timeWageToDoubleLoss(time: Int, wage: Int) -> Double {

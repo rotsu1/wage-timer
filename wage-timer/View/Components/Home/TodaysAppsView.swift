@@ -16,6 +16,13 @@ struct TodaysAppsView: View {
         }
         return 1000
     }
+    @Query private var currencies: [Currency]
+    var currency: String {
+        if let existingCurrency = currencies.first {
+            return existingCurrency.currency
+        }
+        return "¥"
+    }
 
     var body: some View {
         VStack() {
@@ -30,7 +37,7 @@ struct TodaysAppsView: View {
                     title: record.name, 
                     time: timeToString(time: record.totalTime), 
                     occurance: String(record.occurance), 
-                    money: lossToString(time: record.totalTime, wage: wage)
+                    money: lossToString(time: record.totalTime, wage: wage, currency: currency)
                 )
             }
 

@@ -23,6 +23,13 @@ struct GraphView: View {
         }
         return 1000
     }
+    @Query private var currencies: [Currency]
+    var currency: String {
+        if let existingCurrency = currencies.first {
+            return existingCurrency.currency
+        }
+        return "¥"
+    }
 
     var todayYear: Int {
         let today = Date()
@@ -58,7 +65,7 @@ struct GraphView: View {
              totalTime = filter.thisYear.reduce(0) { $0 + $1.time }
         }
         
-        let loss = lossToString(time: totalTime, wage: wage)
+        let loss = lossToString(time: totalTime, wage: wage, currency: currency)
         return "\(loss)"
     }
 

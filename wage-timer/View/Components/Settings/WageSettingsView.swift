@@ -11,6 +11,13 @@ struct WageSettingsView: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var wages: [Wage]
     @State private var newWage: String = ""
+    @Query private var currencies: [Currency]
+    var currency: String {
+        if let existingCurrency = currencies.first {
+            return existingCurrency.currency
+        }
+        return "¥"
+    }
 
     @FocusState private var isWageFocused: Bool
 
@@ -26,7 +33,7 @@ struct WageSettingsView: View {
                         Spacer()
                     }
                     HStack {
-                        Text("¥")
+                        Text(currency)
                         TextField("", text: Binding(
                             get: { wages.first?.wage ?? "1000" },
                             set: { newValue in
