@@ -126,7 +126,14 @@ struct AddInputView: View {
                     Text("Used time (minutes)")
                     Spacer()
                 }
-                TextField("Example: 120", text: $time)
+                TextField("Example: 120", text: Binding(
+                    get: { time },
+                    set: { newValue in
+                        guard let intValue = Int(newValue) else { return }
+                        guard intValue > 0 else { return }
+                        time = String(intValue)
+                    }
+                ))
                     .keyboardType(.numberPad)
                     .padding()
                     .overlay(

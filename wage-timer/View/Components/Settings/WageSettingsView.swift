@@ -37,12 +37,13 @@ struct WageSettingsView: View {
                         TextField("", text: Binding(
                             get: { wages.first?.wage ?? "1000" },
                             set: { newValue in
-                                guard !newValue.isEmpty else { return }
+                                guard let intValue = Int(newValue) else { return }
+                                guard intValue > 0 else { return }
                                 
                                 if let existingWage = wages.first {
-                                    existingWage.wage = newValue
+                                    existingWage.wage = String(intValue)
                                 } else {
-                                    let new = Wage(wage: newValue)
+                                    let new = Wage(wage: String(intValue))
                                     modelContext.insert(new)
                                 }
                             }

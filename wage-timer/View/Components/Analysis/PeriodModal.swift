@@ -61,7 +61,14 @@ struct PeriodModal: View {
 
                     Spacer()
 
-                    TextField("Example: 2025", text: $yearString)
+                    TextField("Example: 2025", text: Binding(
+                        get: { yearString },
+                        set: { newValue in
+                            guard let intValue = Int(newValue) else { return }
+                            guard intValue > 0 else { return }
+                            yearString = String(intValue)
+                        }
+                    ))
                         .focused($isFocused)
                         .onAppear {
                             if let existingAnalysisDates = analysisDates.first {
