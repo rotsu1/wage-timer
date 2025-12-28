@@ -12,36 +12,34 @@ struct NotificationView: View {
     @Query private var notifications: [Notification]
 
     var body: some View {
-        NavigationStack {
-            ZStack {
-                backgroundGradient
-                    .ignoresSafeArea()
+        ZStack {
+            backgroundGradient
+                .ignoresSafeArea()
 
-                VStack {                  
-                    if notifications.isEmpty {
-                        VStack {
-                            Image(systemName: "bell")
-                                .resizable()
-                                .frame(width: 70, height: 70)
-                                .aspectRatio(contentMode: .fit)
-                                .padding(.vertical, 16)
-                            Text("最近の通知はありません")
-                                .fontWeight(.bold)
-                                .font(.title)
-                                .padding(.bottom, 8)
-                            Text("新しいアクティビティがある場合に通知します")
-                        }
-                    } else {
-                        ForEach(notifications.prefix(50), id: \.self) { notification in
-                            notificationCard(notification: notification)
-                        }
+            VStack {                  
+                if notifications.isEmpty {
+                    VStack {
+                        Image(systemName: "bell")
+                            .resizable()
+                            .frame(width: 70, height: 70)
+                            .aspectRatio(contentMode: .fit)
+                            .padding(.vertical, 16)
+                        Text("最近の通知はありません")
+                            .fontWeight(.bold)
+                            .font(.title)
+                            .padding(.bottom, 8)
+                        Text("新しいアクティビティがある場合に通知します")
                     }
-                    
-                    Spacer()
+                } else {
+                    ForEach(notifications.prefix(50), id: \.self) { notification in
+                        notificationCard(notification: notification)
+                    }
                 }
-                .foregroundStyle(.white)
-                .padding(.horizontal, 16)
+                
+                Spacer()
             }
+            .foregroundStyle(.white)
+            .padding(.horizontal, 16)
         }
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {

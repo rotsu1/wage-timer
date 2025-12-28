@@ -16,6 +16,8 @@ struct SettingsListView: View {
     @Query private var wage: [Wage]
     var records: [Record]
 
+    @State private var showModal = false
+
     let languageDict = [
         ("英語", "english"),
         ("日本語", "japanese")
@@ -38,28 +40,35 @@ struct SettingsListView: View {
     var body: some View {
         Form {
             Section {
-                HStack {
-                    Spacer()
-                    Image(systemName: "trophy.fill")
-                        .foregroundStyle(Color.rgbo(red: 235, green: 235, blue: 48, opacity: 1))
-                    Text("プレミアム")
-                        .foregroundStyle(.white)
-                    Spacer()
+                Button {
+                    showModal = true
+                } label: {
+                    HStack {
+                        Spacer()
+                        Image(systemName: "trophy.fill")
+                            .foregroundStyle(Color.rgbo(red: 235, green: 235, blue: 48, opacity: 1))
+                        Text("プレミアム")
+                            .foregroundStyle(.white)
+                        Spacer()
+                    }
+                    .padding()
                 }
-                .padding()
                 .background(
-                    RoundedRectangle(cornerRadius: 20)
-                        .fill(
-                            LinearGradient(
-                                colors: [
-                                    Color.rgbo(red: 146, green: 144, blue: 202, opacity: 1), 
-                                    Color.rgbo(red: 85, green: 84, blue: 117, opacity: 1)
-                                ],
-                                startPoint: .top, endPoint: .bottom
+                        RoundedRectangle(cornerRadius: 20)
+                            .fill(
+                                LinearGradient(
+                                    colors: [
+                                        Color.rgbo(red: 146, green: 144, blue: 202, opacity: 1), 
+                                        Color.rgbo(red: 85, green: 84, blue: 117, opacity: 1)
+                                    ],
+                                    startPoint: .top, endPoint: .bottom
+                                )
                             )
-                        )
-                )
+                    )
                 .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+                .sheet(isPresented: $showModal) {
+                    PremiumModal()
+                }
             }
             Section {
                 ZStack {
@@ -172,8 +181,3 @@ func navRow(image: String, title: String, details: String) -> some View {
         .foregroundStyle(Color.rgbo(red: 179, green: 179, blue: 179, opacity: 1))
     }
 }
-
-//#Preview {
-//    SettingsListView()
-//        .modelContainer(for: [Theme.self, Language.self, Currency.self, Wage.self], inMemory: true)
-//}

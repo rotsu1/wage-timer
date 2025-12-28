@@ -69,15 +69,15 @@ struct AddInputView: View {
                     TextField("", text: $dateString)
                         .focused($isFocused)
                         .onAppear {
-                            dateString = formatter.string(from: date)
+                            dateString = Self.formatter.string(from: date)
                         }
                         .onChange(of: isFocused) {
                             if !isFocused {
-                                if let newDate = formatter.date(from: dateString) {
+                                if let newDate = Self.formatter.date(from: dateString) {
                                     date = newDate
-                                    dateString = formatter.string(from: date)
+                                    dateString = Self.formatter.string(from: date)
                                 } else {
-                                    dateString = formatter.string(from: date)
+                                    dateString = Self.formatter.string(from: date)
                                 }
                             }
                         }
@@ -234,7 +234,7 @@ extension AddInputView {
             get: { date },
             set: { newValue in
                 date = newValue
-                dateString = formatter.string(from: newValue)
+                dateString = Self.formatter.string(from: newValue)
             }
         )
     }
