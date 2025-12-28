@@ -7,20 +7,15 @@
 import AppIntents
 import SwiftData
 
-enum DataContainer {
-    static let shared: ModelContainer = {
-        try! ModelContainer(
-            for: PendingRecord.self,
-            Record.self
-        )
-    }()
-}
-
 struct StartRecordIntent: AppIntent {
     static var title: LocalizedStringResource = "記録を開始する"
 
     @Parameter(title: "記録名")
     var name: String
+
+    static var parameterSummary: some ParameterSummary {
+        Summary("\(\.$name) の記録を開始する")
+    }
 
     func perform() async throws -> some IntentResult {
         await MainActor.run {
@@ -46,6 +41,10 @@ struct StopRecordIntent: AppIntent {
     @Parameter(title: "記録名")
     var name: String
 
+    static var parameterSummary: some ParameterSummary {
+        Summary("\(\.$name) の記録を終了する")
+    }
+
     func perform() async throws -> some IntentResult {
         await MainActor.run {
             let context = ModelContext(DataContainer.shared)
@@ -60,7 +59,7 @@ struct StopRecordIntent: AppIntent {
             }
 
             let seconds = Date().timeIntervalSince(pending.startDate)
-            let minutes = Int(seconds / 60)
+            let minutes = max(1, Int(seconds / 60))
 
             let record = Record(
                 name: pending.name,
@@ -89,7 +88,8 @@ struct MyAppShortcuts: AppShortcutsProvider {
             intent: StartRecordIntent(),
             phrases: [
                 "Start record in \(.applicationName)",
-                "Begin tracking in \(.applicationName)"
+                "Begin tracking in \(.applicationName)",
+                "\(.applicationName)で記録開始"
             ],
             shortTitle: "Start Record",
             systemImageName: "play.circle"
@@ -99,11 +99,11 @@ struct MyAppShortcuts: AppShortcutsProvider {
             intent: StopRecordIntent(),
             phrases: [
                 "Stop record in \(.applicationName)",
-                "End tracking in \(.applicationName)"
+                "End tracking in \(.applicationName)",
+                "\(.applicationName)で記録終了"
             ],
             shortTitle: "Stop Record",
             systemImageName: "stop.circle"
         )
     }
 }
-

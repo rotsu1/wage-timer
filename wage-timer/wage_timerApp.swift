@@ -8,6 +8,21 @@
 import SwiftUI
 import SwiftData
 
+enum DataContainer {
+    static let shared: ModelContainer = {
+        try! ModelContainer(
+            for: Theme.self, 
+                 Language.self, 
+                 Currency.self, 
+                 Wage.self, 
+                 Record.self, 
+                 Analysis.self, 
+                 PendingRecord.self, 
+                 Notification.self
+        )
+    }()
+}
+
 @main
 struct wage_timerApp: App {
     let notificationSettings = NotificationSettings()
@@ -15,7 +30,7 @@ struct wage_timerApp: App {
     var body: some Scene {
         WindowGroup {
             WageAppView()
-                .modelContainer(for: [Theme.self, Language.self, Currency.self, Wage.self, Record.self, Analysis.self])
+                .modelContainer(DataContainer.shared)
                 .onAppear {
                     notificationSettings.requestNotificationRequest()
                 }
