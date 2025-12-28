@@ -89,7 +89,7 @@ struct SettingsListView: View {
                 
                 pickerRow(image: "yensign", title: "Currency", values: currecyDict, bind: currencyBinding)
 
-                pickerRow(image: "circle.righthalf.filled", title: "Appearance", values: themeDict, bind: themeBinding)
+                // pickerRow(image: "circle.righthalf.filled", title: "Appearance", values: themeDict, bind: themeBinding)
 
             } header: {
                 Text("Apps")
