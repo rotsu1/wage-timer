@@ -99,7 +99,7 @@ struct SettingsListView: View {
 
             Section {
                 ZStack {
-                    NavigationLink(destination: NotificationSettingsView(records: records)) {
+                    NavigationLink(destination: HelpView()) {
                         EmptyView()
                     }
                     navRow(image: "questionmark", title: "Help & Usage", details: "")
